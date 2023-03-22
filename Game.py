@@ -10,6 +10,7 @@ from CommonResources import CommonResources
 
 from Player import Player
 from Ball import Ball
+from Map import Map
 
 class Game :
 
@@ -27,7 +28,13 @@ class Game :
         self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7),
             self.common_resources)
 
-        self.common_resources.set_extra_data(self.player)
+        map_rect = Rect(s.x*0.03,s.y*0.1,s.x*0.94,s.y*0.4)
+
+        self.map_ = Map(map_rect,8,6)
+
+
+
+        self.common_resources.set_extra_data(self.player,self.map_)
 
         ball_rect = Rect(player_rect.x + player_rect.width / 2,player_rect.y - s.x*0.01*0.5,
                             s.x * 0.01,s.x*0.01)
@@ -41,15 +48,16 @@ class Game :
     def check_events( self ) :
         self.player.check_events()
         self.ball.check_events()
+        self.map_.check_events()
 
     def render_debug( self, surface: Surface ) :
         ...
-
 
     def render( self, surface: Surface ) :
         surface.fill(self.bg)
         self.player.render(surface)
         self.ball.render(surface)
+        self.map_.render(surface)
 
         if self.events.should_render_debug :
             self.render_debug(surface)

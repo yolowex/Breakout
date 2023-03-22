@@ -28,6 +28,7 @@ class Ball:
         self.assets = self.common_resources.assets
         self.window = self.common_resources.window
         self.player = self.common_resources.player
+        self.map_ = self.common_resources.map_
 
         self.pos = Pos(rect.x,rect.y)
         self.size = Pos(rect.width,rect.height)
@@ -174,6 +175,26 @@ class Ball:
 
             self.angle = reflection_degree
 
+    def check_map_collisions( self ):
+
+        for i in self.map_.bricks:
+
+            if i.rect.colliderect(self.rect) :
+
+
+                p_center = Pos(i.rect.center)
+                diff = self.rect.center[0] - p_center.x
+                reflection_percent = percent(i.rect.width / 2, diff)
+                if reflection_percent < -100 : reflection_percent = -100
+                if reflection_percent > 100 : reflection_percent = 100
+
+                reflection_percent += 100
+
+                reflection_degree = (120 / 200) * reflection_percent - 120 / 2
+
+                self.angle = reflection_degree
+
+                break
 
 
 
@@ -186,6 +207,7 @@ class Ball:
 
         self.check_walls_collision()
         self.check_player_collision()
+        self.check_map_collisions()
 
 
     def check_events( self ):

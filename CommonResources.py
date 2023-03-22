@@ -18,9 +18,12 @@ class CommonResources:
         self.assets = assets
         self.colors = colors
         self.player = None
+        self.map_ = None
 
-    def set_extra_data( self,player ):
+
+    def set_extra_data( self,player,map_=None ):
         self.player = player
+        self.map_ = map_
 
 
 
