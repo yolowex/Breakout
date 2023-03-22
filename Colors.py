@@ -7,6 +7,10 @@ import random as r
 
 
 class Colors:
+    @staticmethod
+    def random_color():
+        return Color([r.randint(0,255) for _ in range(3)])
+
     def __init__(self):
         self.RED = Color(255,0,0)
         self.GREEN = Color(0,255,0)

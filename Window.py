@@ -11,5 +11,8 @@ class Window:
         self.size = size
         self.surface = pg.display.set_mode(size,SCALED | FULLSCREEN)
 
+    @property
+    def rect( self ):
+        return Rect(0,0,self.size.x,self.size.y)
 
 

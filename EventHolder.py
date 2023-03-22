@@ -22,7 +22,8 @@ class EventHolder:
         self.should_render_debug = False
         self.should_run_game = False
         self.should_quit = False
-
+        self.determined_fps = 60
+        self.final_fps = 0
 
     def get_events( self ):
         self.pressed_keys.clear()
@@ -37,9 +38,14 @@ class EventHolder:
 
             if i.type == KEYDOWN:
                 self.pressed_keys.append(i.key)
+                if i.key not in self.held_keys:
+                    self.held_keys.append(i.key)
 
             if i.type == KEYUP:
                 self.released_keys.append(i.key)
+                if i.key in self.held_keys:
+                    self.held_keys.remove(i.key)
+
 
             if i.type == MOUSEBUTTONDOWN:
                 self.mouse_pressed_keys = list(pg.mouse.get_pressed())
