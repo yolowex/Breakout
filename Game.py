@@ -27,6 +27,8 @@ class Game :
         self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7),
             self.common_resources)
 
+        self.common_resources.set_extra_data(self.player)
+
         ball_rect = Rect(player_rect.x + player_rect.width / 2,player_rect.y - s.x*0.01*0.5,
                             s.x * 0.01,s.x*0.01)
 

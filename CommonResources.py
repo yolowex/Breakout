@@ -10,9 +10,17 @@ from EventHolder import EventHolder
 from Assets import Assets
 from Colors import Colors
 
+
 class CommonResources:
     def __init__(self,window:Window,event_holder:EventHolder,assets:Assets,colors:Colors):
         self.window = window
         self.event_holder = event_holder
         self.assets = assets
         self.colors = colors
+        self.player = None
+
+    def set_extra_data( self,player ):
+        self.player = player
+
+
+

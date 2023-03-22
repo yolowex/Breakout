@@ -30,9 +30,12 @@ class EventHolder:
         self.mouse_pressed_keys.clear()
         self.released_keys.clear()
         self.mouse_released_keys.clear()
-
+        self.mouse_focus = pg.mouse.get_focused()
 
         for i in pg.event.get():
+            if i.type == WINDOWENTER or MOUSEMOTION:
+                self.mouse_pos = pg.mouse.get_pos()
+
             if i.type == QUIT or i.type == KEYDOWN and i.key == K_ESCAPE:
                 self.should_quit = True
 
