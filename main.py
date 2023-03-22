@@ -13,9 +13,6 @@ from CommonResources import CommonResources
 from Game import Game
 from Menu import Menu
 
-
-
-
 pg.init()
 window = Window(Pos(800,640))
 event_holder = EventHolder()

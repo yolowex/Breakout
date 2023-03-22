@@ -9,7 +9,7 @@ import random as r
 from CommonResources import CommonResources
 
 from Player import Player
-
+from Ball import Ball
 
 class Game :
 
@@ -27,12 +27,18 @@ class Game :
         self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7),
             self.common_resources)
 
+        ball_rect = Rect(player_rect.x + player_rect.width / 2,player_rect.y - s.x*0.01*0.5,
+                            s.x * 0.01,s.x*0.01)
+
+        self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7),
+            common_resources)
+
         self.bg = self.colors.BLUE.lerp(self.colors.WHITE, 0.7)
 
 
     def check_events( self ) :
         self.player.check_events()
-
+        self.ball.check_events()
 
     def render_debug( self, surface: Surface ) :
         ...
@@ -41,6 +47,7 @@ class Game :
     def render( self, surface: Surface ) :
         surface.fill(self.bg)
         self.player.render(surface)
+        self.ball.render(surface)
 
         if self.events.should_render_debug :
             self.render_debug(surface)
