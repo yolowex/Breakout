@@ -35,7 +35,7 @@ class Ball:
         self.color = color
 
         self.top_pos_distance = 100
-        self.speed = 0.05
+        self.speed = 0.02
 
         self.angle = 180
 
@@ -46,7 +46,7 @@ class Ball:
         rect.center = p_rect.center
         rect.y = p_rect.y - rect.height
         self.pos.x,self.pos.y = rect.x,rect.y
-        self.angle = 0
+        self.angle = r.randint(-3,3)
 
     @property
     def top( self ):
@@ -176,25 +176,134 @@ class Ball:
             self.angle = reflection_degree
 
     def check_map_collisions( self ):
+        ran_factor = 5
+        ran = lambda : r.randint(-ran_factor, ran_factor)
+        c = self.center
+        a = self.angle
+        for brick in self.map_.bricks:
 
-        for i in self.map_.bricks:
+            if brick.rect.colliderect(self.rect) :
+                # self.angle += 180
+                vertical_bias = 'between'
+                horizontal_bias = 'between'
+                vertical_diff = 0
+                horizontal_diff = 0
 
-            if i.rect.colliderect(self.rect) :
+                if self.center.x >= brick.rect.x + brick.rect.width:
+                    horizontal_bias = 'right'
+                    horizontal_diff = abs(self.center.x - (brick.rect.x + brick.rect.width))
+                if self.center.x <= brick.rect.x:
+                    horizontal_bias = 'left'
+                    horizontal_diff = abs(self.center.x - brick.rect.x)
 
 
-                p_center = Pos(i.rect.center)
-                diff = self.rect.center[0] - p_center.x
-                reflection_percent = percent(i.rect.width / 2, diff)
-                if reflection_percent < -100 : reflection_percent = -100
-                if reflection_percent > 100 : reflection_percent = 100
+                if self.center.y >= brick.rect.y + brick.rect.height:
+                    vertical_bias = 'bottom'
+                    vertical_diff = abs(self.center.y - (brick.rect.y + brick.rect.height))
+                if self.center.y <= brick.rect.y:
+                    vertical_bias = 'top'
+                    vertical_diff = abs(self.center.y - brick.rect.y)
 
-                reflection_percent += 100
+                final_bias = 'none'
 
-                reflection_degree = (120 / 200) * reflection_percent - 120 / 2
+                if vertical_diff > horizontal_diff:
+                    final_bias = vertical_bias
+                elif vertical_diff < horizontal_diff:
+                    final_bias = horizontal_bias
 
-                self.angle = reflection_degree
 
-                break
+
+
+                if final_bias == 'none':
+                    # print("Error, invalid bias: ",vertical_bias,horizontal_bias,final_bias)
+                    # print(self.rect,self.center,brick.rect)
+                    if vertical_bias == 'between' and horizontal_bias =='between':
+                        self.angle += 180 + r.randint(-30,30)
+                        return
+
+
+                if final_bias == 'top': # Ball is going down
+                    if 90 <= self.angle <= 270: # if ball is going down
+                        c.y = brick.rect.y - self.size.y / 2
+
+                        if a == 90 :
+                            self.angle = 89
+
+                        if a == 180 :
+                            self.angle = 0 + ran()
+
+                        if a == 270 :
+                            self.angle = 271
+
+                        if 90 < a < 180 :
+                            self.angle = 90 - abs(90 - a) + ran()
+
+                        if 180 < a < 270 :
+                            self.angle = 270 + abs(270 - a) + ran()
+
+
+
+                if final_bias == 'bottom': # Ball is going up
+                    if 270 <= self.angle <= 360 or 0<=self.angle<=90 :  # if ball is going up
+
+                        c.y = brick.rect.y + brick.rect.height + self.size.y / 2
+
+                        if a == 90 :
+                            self.angle = 91
+
+                        if a == 0 or a == 360 :
+                            self.angle = 180 + ran()
+
+                        if a == 270 :
+                            self.angle = 269
+
+                        if 270 < a < 360 :
+                            self.angle = 270 - abs(270 - a) + ran()
+
+                        if 0 < a < 90 :
+                            self.angle = 90 + abs(90 - a) + ran()
+
+                if final_bias == 'right': # Ball is going left
+                    if 180 <= self.angle <= 360 :  # if ball is going left
+                        c.x = brick.rect.x+brick.rect.width+self.size.x / 2
+
+                        if a == 180 :
+                            self.angle = 179
+
+                        if a == 270 :
+                            self.angle = 90 + ran()
+
+                        if a == 360 or a == 0 :
+                            self.angle = 1
+
+                        if 180 < a < 270 :
+                            self.angle = 180 - abs(180 - a) + ran()
+
+                        if 270 < a < 360 :
+                            self.angle = abs(360 - a) + ran()
+
+
+                if final_bias == 'left': # Ball is going right
+                    if 0 <= self.angle <= 180 :  # if ball is going right
+                        c.x = brick.rect.x - self.size.x / 2
+
+                        if a == 180 :
+                            self.angle = 181
+
+                        if a == 90 :
+                            self.angle = 270 + ran()
+
+                        if a == 360 or a == 0 :
+                            self.angle = 359
+
+                        if 0 < a < 90 :
+                            self.angle = 360 - a + ran()
+
+                        if 90 < a < 180 :
+                            self.angle = 180 + abs(180 - a) + ran()
+
+
+        self.center = c
 
 
 
