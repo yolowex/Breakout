@@ -45,10 +45,10 @@ class Player :
 
 
         min_size = self.size.x * 0.1
-
+        size_wing = 6
         self.size_index = 0
-        self.min_size_index = -6
-        self.max_size_index = 6
+        self.min_size_index = -size_wing
+        self.max_size_index = size_wing
 
         size_step = abs(self.size.x-min_size) / abs(self.min_size_index)
 
@@ -73,8 +73,9 @@ class Player :
         min_speed = self.size.y * 0.1
 
         self.speed_index = 0
-        self.min_speed_index = -6
-        self.max_speed_index = 6
+        speed_wing = 6
+        self.min_speed_index = -speed_wing
+        self.max_speed_index = speed_wing
 
         speed_step = abs(self.size.y - min_speed) / abs(self.min_speed_index)
 
@@ -83,6 +84,8 @@ class Player :
             self.speed_list.append(new_speed)
 
         self.speed_list = self.speed_list[::-1]
+
+        print(self.size_list,"\n",self.speed_list)
 
         self.speed_index += abs(self.min_speed_index)
         self.max_speed_index += abs(self.min_speed_index)
@@ -108,7 +111,6 @@ class Player :
     def size_change_speed( self ) :
         return self.rect.width * 0.1
 
-
     def move( self, hkeys ) :
         right = K_RIGHT in hkeys or K_d in hkeys
         left = K_LEFT in hkeys or K_a in hkeys
@@ -124,73 +126,61 @@ class Player :
         if stick :
             if right :
                 self.pos.x = self.window.size.x - self.rect.width
-
             if left :
                 self.pos.x = 0
 
 
-    def speed_up( self ):
-        last_rect = self.rect
+    def respeed( self ):
         center = self.rect.center
-        speed_change = self.speed_change_speed
-        self.size.y -= speed_change
-        revert = self.size.y <= self.window.size.y * 0.01
+        self.size.y = self.speed_list[self.speed_index]
         rect = self.rect
         rect.center = center
+        self.pos.x, self.pos.y = rect.x, rect.y
 
-        if revert:
-            self.pos.x,self.pos.y,self.size.x,self.size.y = last_rect
-        else:
-            self.pos.x,self.pos.y = rect.x,rect.y
 
+    def speed_up( self ):
+        if self.speed_index == self.max_speed_index :
+            return
+        self.speed_index += 1
+
+        self.respeed()
 
 
     def speed_down( self ):
+        if self.speed_index == self.min_speed_index :
+            return
+        self.speed_index -= 1
+
+        self.respeed()
+
+    def resize( self ):
         last_rect = self.rect
         center = self.rect.center
-        speed_change = self.speed_change_speed
-        self.size.y += speed_change
-        revert = self.size.y > self.window.size.y * 0.065
+        self.size.x = self.size_list[self.size_index]
         rect = self.rect
         rect.center = center
+        self.pos.x, self.pos.y = rect.x, rect.y
+
+        revert = not self.window.rect.contains(self.rect)
 
         if revert :
-            self.pos.x, self.pos.y, self.size.x, self.size.y = last_rect
-        else :
-            self.pos.x, self.pos.y = rect.x, rect.y
-
-
-
+            self.pos.x, self.pos.y = last_rect.x, last_rect.y
+            self.size.x, self.size.y = last_rect.width, last_rect.height
 
 
     def grow( self ) :
-        last_rect = self.rect
-        center = self.rect.center
-        self.size.x += self.size_change_speed
-        rect = self.rect
-        rect.center = center
-        self.pos.x, self.pos.y = rect.x, rect.y
+        if self.size_index == self.max_size_index:
+            return
+        self.size_index += 1
 
-        revert = not self.window.rect.contains(self.rect) or self.size.x >= self.window.size.x * 0.3
-
-        if revert :
-            self.pos.x, self.pos.y = last_rect.x, last_rect.y
-            self.size.x, self.size.y = last_rect.width, last_rect.height
-
+        self.resize()
 
     def shrink( self ) :
-        last_rect = self.rect
-        center = self.rect.center
-        self.size.x -= self.size_change_speed
-        rect = self.rect
-        rect.center = center
-        self.pos.x, self.pos.y = rect.x, rect.y
+        if self.size_index == self.min_size_index:
+            return
+        self.size_index -= 1
 
-        revert = not self.window.rect.contains(self.rect) or self.size.x < self.window.size.x * 0.05
-
-        if revert :
-            self.pos.x, self.pos.y = last_rect.x, last_rect.y
-            self.size.x, self.size.y = last_rect.width, last_rect.height
+        self.resize()
 
 
     def check_events( self ) :

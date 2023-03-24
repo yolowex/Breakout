@@ -32,8 +32,8 @@ class Map :
     def create_tiles( self ) :
         X = self.rect.width / self.x_tiles
         Y = self.rect.height / self.y_tiles
-        gap_x = self.rect.width * 0.5 / self.x_tiles
-        gap_y = self.rect.height * 0.5 / self.y_tiles
+        gap_x = self.rect.width * 0.01 / self.x_tiles
+        gap_y = self.rect.height * 0.01 / self.y_tiles
 
         for y in range(self.y_tiles) :
             color = Colors.random_color().lerp([255, 0, 0], 0.4)

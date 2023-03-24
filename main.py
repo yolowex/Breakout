@@ -14,7 +14,7 @@ from Game import Game
 from Menu import Menu
 
 pg.init()
-window = Window(Pos(800,640))
+window = Window(Pos(800,800))
 event_holder = EventHolder()
 colors = Colors()
 assets = Assets()
