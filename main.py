@@ -30,6 +30,9 @@ while not event_holder.should_quit:
     game.check_events()
     game.render(window.surface)
 
+    if K_F3 in event_holder.pressed_keys:
+        event_holder.should_render_debug = not event_holder.should_render_debug
+
 
     pg.display.update()
     clock.tick(event_holder.determined_fps)

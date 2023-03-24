@@ -34,8 +34,8 @@ class Ball:
         self.size = Pos(rect.width,rect.height)
         self.color = color
 
-        self.top_pos_distance = 100
-        self.speed = 0.02
+        self.top_pos_distance = 50
+        self.speed = 0.05
 
         self.angle = 180
 

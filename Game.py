@@ -30,7 +30,7 @@ class Game :
 
         map_rect = Rect(s.x*0.03,s.y*0.1,s.x*0.94,s.y*0.4)
 
-        self.map_ = Map(map_rect,8,6)
+        self.map_ = Map(map_rect,8,6,common_resources)
 
 
 
