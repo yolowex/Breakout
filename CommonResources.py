@@ -5,6 +5,7 @@ from pygame.rect import Rect
 from pygame.color import Color
 import random as r
 
+from typing import Optional
 from Window import Window
 from EventHolder import EventHolder
 from Assets import Assets
@@ -12,10 +13,10 @@ from Colors import Colors
 
 
 class CommonResources:
-    window = None
-    event_holder = None
-    assets = None
-    colors = None
+    window:Optional[Window] = None
+    event_holder:Optional[EventHolder] = None
+    assets:Optional[Assets] = None
+    colors:Optional[Colors] = None
     player = None
     map_ = None
 

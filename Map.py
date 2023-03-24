@@ -46,7 +46,15 @@ class Map :
 
 
     def check_events( self ) :
-        ...
+
+        destroy_list = []
+
+        for brick,c in zip(self.bricks,range(len(self.bricks))):
+            if brick.health == 0:
+                destroy_list.append(c)
+
+        for c in destroy_list[::-1]:
+            self.bricks.pop(c)
 
 
     def render_debug( self, surface: Surface ) :
