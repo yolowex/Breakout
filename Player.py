@@ -17,6 +17,16 @@ from CommonResources import CommonResources
 
 
 class Player :
+    """
+        Upgradeable abilities:
+            paddle size,
+            paddle speed,
+            ball speed,
+
+
+
+
+    """
 
     def __init__( self, rect: Rect, color: Color) :
 
@@ -29,6 +39,56 @@ class Player :
         self.size = Pos(rect.width, rect.height)
 
         self.color = color
+
+        self.size_list  = []
+        self.speed_list = []
+
+
+        min_size = self.size.x * 0.1
+
+        self.size_index = 0
+        self.min_size_index = -6
+        self.max_size_index = 6
+
+        size_step = abs(self.size.x-min_size) / abs(self.min_size_index)
+
+
+        for i in range(self.min_size_index,self.max_size_index+1):
+            mult = i
+            if i > 0:
+                mult = i * 2
+
+            new_size = self.size.x + (size_step * mult)
+            self.size_list.append(new_size)
+
+
+        self.size_index += abs(self.min_size_index)
+        self.max_size_index += abs(self.min_size_index)
+        self.min_size_index += abs(self.min_size_index)
+
+
+
+
+
+        min_speed = self.size.y * 0.1
+
+        self.speed_index = 0
+        self.min_speed_index = -6
+        self.max_speed_index = 6
+
+        speed_step = abs(self.size.y - min_speed) / abs(self.min_speed_index)
+
+        for i in range(self.min_speed_index, self.max_speed_index+ 1) :
+            new_speed = self.size.y + (speed_step * i)
+            self.speed_list.append(new_speed)
+
+        self.speed_list = self.speed_list[::-1]
+
+        self.speed_index += abs(self.min_speed_index)
+        self.max_speed_index += abs(self.min_speed_index)
+        self.min_speed_index += abs(self.min_speed_index)
+
+
 
 
     @property

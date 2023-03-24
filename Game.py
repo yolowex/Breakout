@@ -33,8 +33,11 @@ class Game :
 
         CommonResources.set_extra_data(self.player,self.map_)
 
-        ball_rect = Rect(player_rect.x + player_rect.width / 2,player_rect.y - s.x*0.01*0.5,
-                            s.x * 0.01,s.x*0.01)
+        ball_size = 0.01
+        ball_rect = Rect(player_rect.x + player_rect.width / 2 - s.x*ball_size*0.5,
+                            player_rect.y - s.x*ball_size,
+                            s.x * ball_size,
+                            s.x* ball_size)
 
         self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7))
 
