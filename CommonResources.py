@@ -12,18 +12,28 @@ from Colors import Colors
 
 
 class CommonResources:
-    def __init__(self,window:Window,event_holder:EventHolder,assets:Assets,colors:Colors):
-        self.window = window
-        self.event_holder = event_holder
-        self.assets = assets
-        self.colors = colors
-        self.player = None
-        self.map_ = None
+    window = None
+    event_holder = None
+    assets = None
+    colors = None
+    player = None
+    map_ = None
+
+    @staticmethod
+    def set_data(window:Window,event_holder:EventHolder,assets:Assets,colors:Colors):
+        CommonResources.window = window
+        CommonResources.event_holder = event_holder
+        CommonResources.assets = assets
+        CommonResources.colors = colors
+        CommonResources.player = None
+        CommonResources.map_ = None
 
 
-    def set_extra_data( self,player,map_=None ):
-        self.player = player
-        self.map_ = map_
+    @staticmethod
+    def set_extra_data( player, map_=None ) :
+        CommonResources.player = player
+        CommonResources.map_ = map_
+
 
 
 

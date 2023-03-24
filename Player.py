@@ -18,12 +18,12 @@ from CommonResources import CommonResources
 
 class Player :
 
-    def __init__( self, rect: Rect, color: Color, common_resources: CommonResources ) :
-        self.common_resources = common_resources
-        self.events = self.common_resources.event_holder
-        self.colors = self.common_resources.colors
-        self.assets = self.common_resources.assets
-        self.window = self.common_resources.window
+    def __init__( self, rect: Rect, color: Color) :
+
+        self.events = CommonResources.event_holder
+        self.colors = CommonResources.colors
+        self.assets = CommonResources.assets
+        self.window = CommonResources.window
 
         self.pos = Pos(rect.x, rect.y)
         self.size = Pos(rect.width, rect.height)

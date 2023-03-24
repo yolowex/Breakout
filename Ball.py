@@ -21,14 +21,14 @@ def rotate(origin, point, angle):
 
 
 class Ball:
-    def __init__(self,rect:Rect,color:Color,common_resources:CommonResources):
-        self.common_resources = common_resources
-        self.events = self.common_resources.event_holder
-        self.colors = self.common_resources.colors
-        self.assets = self.common_resources.assets
-        self.window = self.common_resources.window
-        self.player = self.common_resources.player
-        self.map_ = self.common_resources.map_
+    def __init__(self,rect:Rect,color:Color):
+        self.events = CommonResources.event_holder
+        self.colors = CommonResources.colors
+        self.assets = CommonResources.assets
+        self.window = CommonResources.window
+
+        self.player = CommonResources.player
+        self.map_ = CommonResources.map_
 
         self.pos = Pos(rect.x,rect.y)
         self.size = Pos(rect.width,rect.height)
@@ -302,6 +302,8 @@ class Ball:
                         if 90 < a < 180 :
                             self.angle = 180 + abs(180 - a) + ran()
 
+                brick.health -= 1
+                break
 
         self.center = c
 

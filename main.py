@@ -18,10 +18,11 @@ window = Window(Pos(800,640))
 event_holder = EventHolder()
 colors = Colors()
 assets = Assets()
-common_resources = CommonResources(window,event_holder,assets,colors)
+common_resources = CommonResources.set_data(window,event_holder,assets,colors)
 
-game = Game(common_resources)
-menu = Menu(common_resources)
+game = Game()
+menu = Menu()
+
 clock = pg.time.Clock()
 event_holder.determined_fps = 120
 

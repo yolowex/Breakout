@@ -4,6 +4,7 @@ from pygame.math import Vector2 as Pos
 from pygame.rect import Rect
 from pygame.color import Color
 import random as r
+from random import randint as rr
 from pygame.surface import Surface
 
 from Colors import Colors
@@ -14,12 +15,13 @@ from CommonResources import CommonResources
 
 class Map :
 
-    def __init__( self, rect: Rect, x_tiles, y_tiles,common_resources:CommonResources ) :
-        self.common_resources = common_resources
-        self.events = self.common_resources.event_holder
-        self.colors = self.common_resources.colors
-        self.assets = self.common_resources.assets
-        self.window = self.common_resources.window
+    def __init__( self, rect: Rect, x_tiles, y_tiles ) :
+
+        self.events = CommonResources.event_holder
+        self.colors = CommonResources.colors
+        self.assets = CommonResources.assets
+        self.window = CommonResources.window
+
         self.rect = rect
         self.x_tiles = x_tiles
         self.y_tiles = y_tiles
@@ -39,7 +41,8 @@ class Map :
                 rect = Rect(self.rect.x + x * X + gap_x / 2, self.rect.y + y * Y + gap_y / 2,
                     X - gap_x, Y - gap_y)
 
-                self.bricks.append(Brick(rect, color))
+                self.bricks.append(Brick(rect, color,rr(1,5)))
+
 
 
     def check_events( self ) :

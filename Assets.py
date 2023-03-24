@@ -8,4 +8,5 @@ import random as r
 
 class Assets:
     def __init__(self):
-        ...
+        self.font = pg.font.SysFont('Arial',30)
+

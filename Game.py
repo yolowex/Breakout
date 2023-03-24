@@ -14,33 +14,29 @@ from Map import Map
 
 class Game :
 
-    def __init__( self, common_resources: CommonResources ) :
-        self.common_resources = common_resources
-        self.events = self.common_resources.event_holder
-        self.colors = self.common_resources.colors
-        self.assets = self.common_resources.assets
-        self.window = self.common_resources.window
+    def __init__( self) :
+
+        self.events = CommonResources.event_holder
+        self.colors = CommonResources.colors
+        self.assets = CommonResources.assets
+        self.window = CommonResources.window
 
         s = self.window.size
         player_rect = Rect(s.x * 0.45, s.y * 0.92, s.x * 0.1, s.y * 0.025)
 
 
-        self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7),
-            self.common_resources)
+        self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7))
 
         map_rect = Rect(s.x*0.03,s.y*0.1,s.x*0.94,s.y*0.4)
 
-        self.map_ = Map(map_rect,8,6,common_resources)
+        self.map_ = Map(map_rect,8,6)
 
-
-
-        self.common_resources.set_extra_data(self.player,self.map_)
+        CommonResources.set_extra_data(self.player,self.map_)
 
         ball_rect = Rect(player_rect.x + player_rect.width / 2,player_rect.y - s.x*0.01*0.5,
                             s.x * 0.01,s.x*0.01)
 
-        self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7),
-            common_resources)
+        self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7))
 
         self.bg = self.colors.BLUE.lerp(self.colors.WHITE, 0.7)
 
