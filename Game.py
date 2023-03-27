@@ -33,6 +33,8 @@ class Game :
 
         CommonResources.set_extra_data(self.player,self.map_)
 
+        self.map_.update()
+
         ball_size = 0.01
         ball_rect = Rect(player_rect.x + player_rect.width / 2 - s.x*ball_size*0.5,
                             player_rect.y - s.x*ball_size,

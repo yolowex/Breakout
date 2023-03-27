@@ -26,8 +26,13 @@ class Map :
         self.x_tiles = x_tiles
         self.y_tiles = y_tiles
         self.bricks = []
+        self.bonus_list = []
         self.create_tiles()
 
+    def update( self ):
+        for brick in self.bricks:
+            if brick.bonus is not None:
+                brick.bonus.update()
 
     def create_tiles( self ) :
         X = self.rect.width / self.x_tiles
@@ -41,19 +46,37 @@ class Map :
                 rect = Rect(self.rect.x + x * X + gap_x / 2, self.rect.y + y * Y + gap_y / 2,
                     X - gap_x, Y - gap_y)
 
-                self.bricks.append(Brick(rect, color,rr(1,5)))
+                brick = Brick(rect, color,rr(1,1))
+                brick.set_bonus(30)
+
+                self.bricks.append(brick)
 
 
 
     def check_events( self ) :
 
-        destroy_list = []
+        brick_destroy_list = []
+        bonus_destroy_list = []
+
+        for bonus,c in zip(self.bonus_list,range(len(self.bonus_list))):
+            if (bonus.center.y - bonus.radius) > self.window.size.y or bonus.consumed:
+                bonus_destroy_list.append(c)
+            else:
+                bonus.check_events()
+
+        for c in bonus_destroy_list[::-1]:
+            self.bonus_list.pop(c)
+
+
 
         for brick,c in zip(self.bricks,range(len(self.bricks))):
             if brick.health == 0:
-                destroy_list.append(c)
+                brick_destroy_list.append(c)
+                if brick.bonus is not None:
+                    self.bonus_list.append(brick.bonus)
 
-        for c in destroy_list[::-1]:
+
+        for c in brick_destroy_list[::-1]:
             self.bricks.pop(c)
 
 
@@ -65,7 +88,11 @@ class Map :
         for brick in self.bricks :
             brick.render(surface)
 
+        for bonus in self.bonus_list:
+            bonus.render(surface)
+
         if self.events.should_render_debug:
             self.render_debug(surface)
+
 
 

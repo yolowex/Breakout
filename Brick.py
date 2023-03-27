@@ -5,6 +5,7 @@ from pygame.rect import Rect
 from pygame.color import Color
 import random as r
 from pygame.surface import Surface
+from Bonus import Bonus
 
 from CommonResources import CommonResources
 
@@ -17,12 +18,25 @@ class Brick:
 
         self.rect = rect
         self.color = color
-
+        self.bonus = None
         self.health = health
 
     @property
     def mfont( self ):
         return self.assets.font.render(f"{self.health}",False,self.colors.WHITE)
+
+
+    def set_bonus( self,chance_percent:int ):
+        l = [0] * (100-chance_percent)
+        l += [1] * chance_percent
+        if r.choice(l):
+            bonus_name = r.choice(Bonus.names_list)
+            self.bonus = Bonus(bonus_name,
+                self.rect.center,
+                min([self.rect.width,self.rect.height])/4,
+                Bonus.all_[bonus_name]
+            )
+
 
     def render_debug( self,surface:Surface ):
         m_rect = self.rect.copy()

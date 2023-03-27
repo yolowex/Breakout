@@ -21,10 +21,6 @@ class Player :
         Upgradeable abilities:
             paddle size,
             paddle speed,
-            ball speed,
-
-
-
 
     """
 
@@ -66,10 +62,6 @@ class Player :
         self.max_size_index += abs(self.min_size_index)
         self.min_size_index += abs(self.min_size_index)
 
-
-
-
-
         min_speed = self.size.y * 0.1
 
         self.speed_index = 0
@@ -85,7 +77,6 @@ class Player :
 
         self.speed_list = self.speed_list[::-1]
 
-        print(self.size_list,"\n",self.speed_list)
 
         self.speed_index += abs(self.min_speed_index)
         self.max_speed_index += abs(self.min_speed_index)
