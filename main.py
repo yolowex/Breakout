@@ -4,6 +4,9 @@ from pygame.math import Vector2 as Pos
 from pygame.rect import Rect
 from pygame.color import Color
 import random as r
+import sys
+import json
+
 
 from Window import Window
 from EventHolder import EventHolder
@@ -12,6 +15,14 @@ from Assets import Assets
 from CommonResources import CommonResources
 from Game import Game
 from Menu import Menu
+
+
+
+
+
+
+
+# if r.choice([1]): sys.exit()
 
 pg.init()
 window = Window(Pos(800,800))

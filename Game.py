@@ -27,9 +27,7 @@ class Game :
 
         self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7))
 
-        map_rect = Rect(s.x*0.03,s.y*0.1,s.x*0.94,s.y*0.4)
-
-        self.map_ = Map(map_rect,8,6)
+        self.map_ = Map("./Maps/map_1.json")
 
         CommonResources.set_extra_data(self.player,self.map_)
 

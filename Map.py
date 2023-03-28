@@ -4,9 +4,11 @@ from pygame.math import Vector2 as Pos
 from pygame.rect import Rect
 from pygame.color import Color
 import random as r
+import json
+
+from typing import Optional
 from random import randint as rr
 from pygame.surface import Surface
-
 from Colors import Colors
 
 from Brick import Brick
@@ -15,19 +17,48 @@ from CommonResources import CommonResources
 
 class Map :
 
-    def __init__( self, rect: Rect, x_tiles, y_tiles ) :
+    def __init__( self,path:str ) :
 
         self.events = CommonResources.event_holder
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
         self.window = CommonResources.window
 
-        self.rect = rect
-        self.x_tiles = x_tiles
-        self.y_tiles = y_tiles
+        self.path = "none"
+        self.name = "none"
+        self.rect: Optional[Rect]= None
+        self.total_gap_x = 0
+        self.total_gap_y = 0
+
+        self.colors = {}
+        self.health_rows = []
         self.bricks = []
         self.bonus_list = []
+
+
+        self.load(path)
         self.create_tiles()
+
+
+    def load( self,path:str ):
+        self.path = path
+        f = open(path).read()
+        j = json.loads(f)
+
+        self.name = j['name']
+        self.health_rows = j["health_rows"]
+        self.rect = Rect(
+                        j['rect_x'] * self.window.size.x,
+                        j['rect_y'] * self.window.size.y,
+                        j['rect_w'] * self.window.size.x,
+                        j['rect_h'] * self.window.size.y
+        )
+
+        self.total_gap_x = j['total_gap_x']
+        self.total_gap_y = j['total_gap_y']
+        self.colors:dict = j['colors']
+
+
 
     def update( self ):
         for brick in self.bricks:
@@ -35,22 +66,28 @@ class Map :
                 brick.bonus.update()
 
     def create_tiles( self ) :
-        X = self.rect.width / self.x_tiles
-        Y = self.rect.height / self.y_tiles
-        gap_x = self.rect.width * 0.01 / self.x_tiles
-        gap_y = self.rect.height * 0.01 / self.y_tiles
 
-        for y in range(self.y_tiles) :
-            color = Colors.random_color().lerp([255, 0, 0], 0.4)
-            for x in range(self.x_tiles) :
-                rect = Rect(self.rect.x + x * X + gap_x / 2, self.rect.y + y * Y + gap_y / 2,
-                    X - gap_x, Y - gap_y)
+        Y = self.rect.height / len(self.health_rows)
 
-                brick = Brick(rect, color,rr(1,1))
-                brick.set_bonus(30)
 
+        for y,row in zip(range(len(self.health_rows)),self.health_rows):
+            for x,health in zip(range(len(row)),row):
+                X = self.rect.width / len(row)
+                if str(health) in self.colors:
+                    color = self.colors[
+                        str(health)
+                    ]
+                else:
+                    color = Colors.random_color()
+
+                rect = Rect(
+                    self.rect.x+x*X+self.total_gap_x*X/2,
+                    self.rect.y+y*Y+self.total_gap_y*Y/2,
+                    X-self.total_gap_x*X,
+                    Y-self.total_gap_y*Y
+                )
+                brick = Brick(rect,color,health)
                 self.bricks.append(brick)
-
 
 
     def check_events( self ) :
