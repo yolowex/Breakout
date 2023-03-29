@@ -1,12 +1,14 @@
 import pygame as pg
 from pygame.locals import *
-from pygame.math import Vector2 as Pos
+from pygame.math import Vector2 as V2
 from pygame.rect import Rect
 from pygame.color import Color
 from pygame.surface import Surface
 import random as r
 from typing import Optional
 from CommonResources import CommonResources
+from modules.mygame.drawables import *
+from modules.mygame.structures import *
 
 from Colors import Colors
 from Player import Player
@@ -49,22 +51,13 @@ class Game :
         self.screen_shot = self.window.surface.copy()
 
     def game_over_text( self ):
-        game_over_text = "You lose , press F to try again"
-        s = self.assets.font_gameover.size(game_over_text)
-        surface = Surface([s[0]*1.1,s[1]*2.5]).convert_alpha()
-        color = Colors.WHITE
-        color.a = 155
-        surface.fill(color)
+        game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
 
-        rect = surface.get_rect()
-        text = self.assets.font_gameover.render(game_over_text,True,[0,0,0])
+        text_box = TextBox(game_over_text,Pos(0,0),self.window.size.x*0.7,"./farsi/farsi 155.ttf",
+            60,(0,0,0),(255,255,255,155),"rtl",True
+        )
 
-        rect_2 = text.get_rect()
-        rect_2.center = rect.center
-
-        surface.blit(text,rect_2)
-
-        return surface
+        return text_box.text_surface
 
     def check_events( self ) :
         if not self.events.game_over:
@@ -72,7 +65,7 @@ class Game :
             self.ball.check_events()
             self.map_.check_events()
 
-        if self.events.game_over and K_f in self.events.pressed_keys:
+        if self.events.game_over and K_RETURN in self.events.pressed_keys:
             self.events.game_over = False
             self.map_.reload()
             self.player.reset()
