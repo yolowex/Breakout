@@ -24,12 +24,17 @@ class Brick:
         self.bonus = None
         self.health = health
         self.edge_size = 0
-        self.font_time_interval = 2
+        self.font_time_interval = 5
         self.font_time = 0
 
     @property
     def mfont( self ):
-        return self.assets.font.render(f"{self.health}",False,self.colors.WHITE)
+        target_color = Colors.WHITE
+
+        if sum(self.color) > 255*3*0.5:
+            target_color = Colors.BLACK
+
+        return self.assets.font.render(f"{self.health}",False,self.color.lerp(target_color,0.7))
 
     def hit( self ):
         self.health -= 1

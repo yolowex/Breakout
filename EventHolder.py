@@ -34,7 +34,7 @@ class EventHolder:
 
         for i in pg.event.get():
             if i.type == WINDOWENTER or MOUSEMOTION:
-                self.mouse_pos = pg.mouse.get_pos()
+                self.mouse_pos = Pos(pg.mouse.get_pos())
 
             if i.type == QUIT or i.type == KEYDOWN and i.key == K_ESCAPE:
                 self.should_quit = True
