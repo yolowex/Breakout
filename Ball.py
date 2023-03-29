@@ -327,8 +327,6 @@ class Ball:
 
 
     def check_events( self ):
-        # if K_SPACE in self.events.pressed_keys:
-        #     self.reset()
 
         self.angle = self.angle % 360
         self.move()
