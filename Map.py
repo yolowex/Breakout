@@ -41,6 +41,26 @@ class Map :
         self.create_tiles()
 
 
+    def reset( self ):
+        self.path = "none"
+        self.name = "none"
+        self.rect: Optional[Rect] = None
+        self.total_gap_x = 0
+        self.total_gap_y = 0
+
+        self.colors = {}
+        self.health_rows = []
+        self.bricks = []
+        self.bonus_list = []
+        self.edge_size = 0
+
+    def reload( self,path:str = None ):
+        if path is None: path = self.path
+        self.reset()
+        self.load(path)
+        self.create_tiles()
+
+
     def load( self,path:str ):
         self.path = path
         f = open(path).read()
@@ -77,6 +97,8 @@ class Map :
 
         for y,row in zip(range(len(self.health_rows)),self.health_rows):
             for x,health in zip(range(len(row)),row):
+                if health <= 0: continue
+
                 X = self.rect.width / len(row)
                 if str(health) in self.colors:
                     color = Color(self.colors[str(health)])
@@ -107,8 +129,6 @@ class Map :
 
         for c in bonus_destroy_list[::-1]:
             self.bonus_list.pop(c)
-
-
 
         for brick,c in zip(self.bricks,range(len(self.bricks))):
             if brick.health == 0:

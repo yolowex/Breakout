@@ -19,6 +19,7 @@ class CommonResources:
     colors:Optional[Colors] = None
     player = None
     map_ = None
+    game = None
 
     @staticmethod
     def set_data(window:Window,event_holder:EventHolder,assets:Assets,colors:Colors):
@@ -28,12 +29,14 @@ class CommonResources:
         CommonResources.colors = colors
         CommonResources.player = None
         CommonResources.map_ = None
+        CommonResources.game = None
 
 
     @staticmethod
-    def set_extra_data( player, map_=None ) :
+    def set_extra_data( player, map_=None,game=None ) :
         CommonResources.player = player
         CommonResources.map_ = map_
+        CommonResources.game = game
 
 
 

@@ -27,8 +27,10 @@ class Ball:
         self.assets = CommonResources.assets
         self.window = CommonResources.window
 
+
         self.player = CommonResources.player
         self.map_ = CommonResources.map_
+        self.game = CommonResources.game
 
         self.pos = Pos(rect.x,rect.y)
         self.size = Pos(rect.width,rect.height)
@@ -134,6 +136,9 @@ class Ball:
         if c.y > self.window.size.y - self.size.y / 2 : # DOWN
             self.angle = 180
             c.y = self.window.size.y - self.size.y / 2
+
+            self.events.game_over = True
+            self.game.get_screen_shot()
 
 
             # c.y = self.window.size.y - self.size.y / 2
@@ -322,8 +327,8 @@ class Ball:
 
 
     def check_events( self ):
-        if K_SPACE in self.events.pressed_keys:
-            self.reset()
+        # if K_SPACE in self.events.pressed_keys:
+        #     self.reset()
 
         self.angle = self.angle % 360
         self.move()

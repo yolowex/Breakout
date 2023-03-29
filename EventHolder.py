@@ -24,6 +24,7 @@ class EventHolder:
         self.should_render_debug = False
         self.should_run_game = False
         self.should_quit = False
+        self.game_over = False
         self.determined_fps = 60
         self.final_fps = 0
 

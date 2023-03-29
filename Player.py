@@ -31,6 +31,8 @@ class Player :
         self.assets = CommonResources.assets
         self.window = CommonResources.window
 
+        self.init_rect = rect
+
         self.pos = Pos(rect.x, rect.y)
         self.size = Pos(rect.width, rect.height)
 
@@ -83,6 +85,11 @@ class Player :
         self.min_speed_index += abs(self.min_speed_index)
 
 
+    def reset( self ):
+        rect = self.init_rect
+        self.pos = Pos(rect.x, rect.y)
+        self.size = Pos(rect.width, rect.height)
+        self.size_index = self.speed_index = 0
 
 
     @property
