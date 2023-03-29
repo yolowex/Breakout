@@ -74,9 +74,7 @@ class Map :
             for x,health in zip(range(len(row)),row):
                 X = self.rect.width / len(row)
                 if str(health) in self.colors:
-                    color = self.colors[
-                        str(health)
-                    ]
+                    color = Color(self.colors[str(health)])
                 else:
                     color = Colors.random_color()
 

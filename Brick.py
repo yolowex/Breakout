@@ -7,6 +7,7 @@ import random as r
 from pygame.surface import Surface
 from Bonus import Bonus
 
+from Colors import Colors
 from CommonResources import CommonResources
 
 class Brick:
@@ -45,7 +46,15 @@ class Brick:
         surface.blit(self.mfont, m_rect)
 
     def render( self,surface:Surface ):
-        pg.draw.rect(surface,self.color,self.rect)
+        rect = self.rect.copy()
+
+        rect.x-=1
+        rect.y-=1
+        rect.w+=1
+        rect.h+=1
+
+        pg.draw.rect(surface,self.color,rect)
+        pg.draw.rect(surface,self.color.lerp(Colors.BLACK,0.5),rect,width=3)
 
         if self.events.should_render_debug:
             self.render_debug(surface)
