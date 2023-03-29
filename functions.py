@@ -21,6 +21,16 @@ function RectCircleColliding(circle,rect){
 }
 """
 
+def rotate(origin, point, angle):
+    angle = math.radians(angle)
+    ox, oy = origin
+    px, py = point
+
+    qx = ox + math.cos(angle) * (px - ox) - math.sin(angle) * (py - oy)
+    qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
+    return qx, qy
+
+
 def RectCircleCollision(circle_center:Pos,circle_radius,rect:Rect):
     distX = abs(circle_center.x - rect.x-rect.w/2)
     distY = abs(circle_center.y - rect.y-rect.h/2)

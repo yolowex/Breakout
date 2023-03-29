@@ -13,6 +13,8 @@ class EventHolder:
         self.released_keys = []
         self.held_keys = []
 
+
+        self.mouse_moved = False
         self.mouse_pos = Pos(0,0)
         self.mouse_pressed_keys = [False,False,False]
         self.mouse_released_keys = [False,False,False]
@@ -27,14 +29,17 @@ class EventHolder:
 
     def get_events( self ):
         self.pressed_keys.clear()
-        self.mouse_pressed_keys.clear()
         self.released_keys.clear()
-        self.mouse_released_keys.clear()
+        self.mouse_pressed_keys = [False, False, False]
+        self.mouse_released_keys = [False, False, False]
         self.mouse_focus = pg.mouse.get_focused()
-
+        self.mouse_moved = False
         for i in pg.event.get():
             if i.type == WINDOWENTER or MOUSEMOTION:
                 self.mouse_pos = Pos(pg.mouse.get_pos())
+
+            if i.type == MOUSEMOTION:
+                self.mouse_moved = True
 
             if i.type == QUIT or i.type == KEYDOWN and i.key == K_ESCAPE:
                 self.should_quit = True
