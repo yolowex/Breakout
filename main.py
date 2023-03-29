@@ -34,6 +34,9 @@ common_resources = CommonResources.set_data(window,event_holder,assets,colors)
 game = Game()
 menu = Menu()
 
+f = pg.font.SysFont('monospace',30,bold=True)
+font = lambda: f.render(f"FPS:{round(event_holder.final_fps)}",False,[80,12,25])
+
 clock = pg.time.Clock()
 event_holder.determined_fps = 120
 
@@ -44,6 +47,9 @@ while not event_holder.should_quit:
 
     if K_F3 in event_holder.pressed_keys:
         event_holder.should_render_debug = not event_holder.should_render_debug
+
+    if event_holder.should_render_debug:
+        window.surface.blit(font(),[0,0])
 
 
     pg.display.update()

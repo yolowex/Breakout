@@ -19,7 +19,7 @@ class EventHolder:
         self.mouse_held_keys = [False,False,False]
         self.mouse_focus = False
 
-        self.should_render_debug = True
+        self.should_render_debug = False
         self.should_run_game = False
         self.should_quit = False
         self.determined_fps = 60

@@ -4,8 +4,8 @@
   "rect_y": 0.1,
   "rect_w": 1,
   "rect_h": 0.40,
-  "total_gap_x": 0.0,
-  "total_gap_y": 0.0,
+  "total_gap_x": 0.03,
+  "total_gap_y": 0.1,
   "health_rows":
   [
 
@@ -31,6 +31,9 @@
     "7":[80,80,135],
     "8": [99,199,209],
     "9": [14,14,114]
-  }
+  },
+
+  "edge_size": 10
+
 
 }

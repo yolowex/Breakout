@@ -34,6 +34,7 @@ class Map :
         self.health_rows = []
         self.bricks = []
         self.bonus_list = []
+        self.edge_size = 0
 
 
         self.load(path)
@@ -44,6 +45,10 @@ class Map :
         self.path = path
         f = open(path).read()
         j = json.loads(f)
+
+        if 'edge_size' in j:
+            self.edge_size = j['edge_size']
+
 
         self.name = j['name']
         self.health_rows = j["health_rows"]
@@ -85,6 +90,7 @@ class Map :
                     Y-self.total_gap_y*Y
                 )
                 brick = Brick(rect,color,health)
+                brick.edge_size = self.edge_size
                 self.bricks.append(brick)
 
 

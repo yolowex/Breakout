@@ -302,7 +302,7 @@ class Ball:
                         if 90 < a < 180 :
                             self.angle = 180 + abs(180 - a) + ran()
 
-                brick.health -= 1
+                brick.hit()
                 break
 
         self.center = c
