@@ -34,12 +34,6 @@ game = Game()
 menu = Menu()
 mouse = Mouse()
 
-text = "این یک پیام تستی است"
-text_box = TextBox(
-    text,Pos(0,0),300,"./farsi/farsi 1.ttf",30,
-    tuple(Colors.BLACK),tuple(Colors.WHITE),"ltr",True
-)
-
 
 f = pg.font.SysFont('monospace',30,bold=True)
 
@@ -67,8 +61,6 @@ while not event_holder.should_quit:
 
     if event_holder.should_render_debug:
         window.surface.blit(font(),[0,0])
-
-    # text_box.render(window.surface)
 
     pg.display.update()
     clock.tick(event_holder.determined_fps)
