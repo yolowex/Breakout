@@ -30,6 +30,7 @@ class Player :
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
         self.window = CommonResources.window
+        self.edge = 0
 
         self.init_rect = rect
 
@@ -37,6 +38,7 @@ class Player :
         self.size = Pos(rect.width, rect.height)
 
         self.color = color
+
 
         self.size_list  = []
         self.speed_list = []
@@ -91,6 +93,9 @@ class Player :
         self.size = Pos(rect.width, rect.height)
         self.size_index = self.speed_index = 0
 
+    @property
+    def border_color( self ):
+        return self.color.lerp(Colors.BLACK,0.5)
 
     @property
     def rect( self ) :
@@ -201,4 +206,5 @@ class Player :
 
 
     def render( self, surface: Surface ) :
-        pg.draw.rect(surface, self.color, self.rect)
+        pg.draw.rect(surface, self.color, self.rect,border_radius=self.edge)
+        pg.draw.rect(surface, self.border_color, self.rect,width=3,border_radius=self.edge)

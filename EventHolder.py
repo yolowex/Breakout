@@ -24,7 +24,7 @@ class EventHolder :
         self.mouse_held_keys = [False, False, False]
         self.mouse_focus = False
 
-        self.should_render_debug = True
+        self.should_render_debug = False
         self.should_run_game = False
         self.should_quit = False
         self.game_over = False
@@ -47,14 +47,6 @@ class EventHolder :
 
             if i.type == MOUSEMOTION :
                 self.mouse_moved = True
-
-            if i.type == QUIT or (i.type == KEYDOWN and
-                    i.key == K_ESCAPE and not self.should_run_game) :
-
-                self.should_quit = True
-
-            if i.type == KEYDOWN and i.key == K_ESCAPE and self.should_run_game :
-                self.should_run_game = False
 
             if i.type == KEYDOWN :
                 self.pressed_keys.append(i.key)

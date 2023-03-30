@@ -222,7 +222,18 @@ class Menu:
     def check_events( self ):
         self.current_page.check_events()
 
-        if self.current_page.current_collision is not None and self.events.mouse_pressed_keys[0]:
+        if K_F1 in self.events.released_keys:
+            self.events.should_quit = True
+
+        if K_ESCAPE in self.events.released_keys:
+            if self.page_number not in [Menu.MAIN_MENU,Menu.EXIT]:
+                self.page_number = Menu.MAIN_MENU
+            elif self.page_number == Menu.MAIN_MENU:
+                self.page_number = Menu.EXIT
+            elif self.page_number == Menu.EXIT:
+                self.events.should_quit = True
+
+        elif self.current_page.current_collision is not None and self.events.mouse_pressed_keys[0]:
             c = self.current_page.current_collision
             if self.page_number == Menu.MAIN_MENU:
                 if c == 1:

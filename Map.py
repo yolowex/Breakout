@@ -13,7 +13,7 @@ from Colors import Colors
 
 from Brick import Brick
 from CommonResources import CommonResources
-
+from Player import Player
 
 class Map :
 
@@ -23,6 +23,7 @@ class Map :
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
         self.window = CommonResources.window
+        self.player = CommonResources.player
 
         self.path = "none"
         self.name = "none"
@@ -35,7 +36,7 @@ class Map :
         self.bricks = []
         self.bonus_list = []
         self.edge_size = 0
-
+        self.bg = Colors.BLACK
 
         self.load(path)
         self.create_tiles()
@@ -62,6 +63,7 @@ class Map :
 
 
     def load( self,path:str ):
+
         self.path = path
         f = open(path).read()
         j = json.loads(f)
@@ -70,6 +72,9 @@ class Map :
             self.edge_size = j['edge_size']
 
 
+        self.bg = pg.color.Color(j['background_color'])
+        self.player.color = pg.color.Color(j['paddle_color'])
+        self.player.edge = int(j['paddle_edge_size'])
         self.name = j['name']
         self.health_rows = j["health_rows"]
         self.rect = Rect(
@@ -86,6 +91,12 @@ class Map :
 
 
     def update( self ):
+        self.events = CommonResources.event_holder
+        self.colors = CommonResources.colors
+        self.assets = CommonResources.assets
+        self.window = CommonResources.window
+        self.player = CommonResources.player
+
         for brick in self.bricks:
             if brick.bonus is not None:
                 brick.bonus.update()
@@ -146,6 +157,8 @@ class Map :
 
 
     def render( self, surface: Surface ) :
+        surface.fill(self.bg)
+
         for brick in self.bricks :
             brick.render(surface)
 

@@ -31,6 +31,8 @@ class Game :
 
         self.player = Player(player_rect, self.colors.random_color().lerp(self.colors.RED, 0.7))
 
+        CommonResources.player = self.player
+
         self.map_ = Map("./Maps/map_1.json")
 
         CommonResources.set_extra_data(self.player,self.map_,self)
@@ -45,7 +47,6 @@ class Game :
 
         self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7))
 
-        self.bg = self.colors.BLUE.lerp(self.colors.WHITE, 0.7)
 
     def reload( self,path:str ):
         self.events.game_over = False
@@ -71,6 +72,9 @@ class Game :
             self.ball.check_events()
             self.map_.check_events()
 
+        if K_ESCAPE in self.events.released_keys:
+            self.events.should_run_game = False
+
         if self.events.game_over and K_RETURN in self.events.pressed_keys:
             self.events.game_over = False
             self.map_.reload()
@@ -83,10 +87,10 @@ class Game :
 
     def render( self, surface: Surface ) :
         if not self.events.game_over:
-            surface.fill(self.bg)
+
+            self.map_.render(surface)
             self.player.render(surface)
             self.ball.render(surface)
-            self.map_.render(surface)
 
             if self.events.should_render_debug :
                 self.render_debug(surface)
