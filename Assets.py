@@ -11,3 +11,5 @@ class Assets:
         self.font = pg.font.SysFont('Arial',30)
         self.font_monobold = pg.font.SysFont('monospace',30,bold=True)
         self.font_gameover = pg.font.SysFont('Arial',30,bold=True)
+        self.persian_font_path = "./fonts/farsi/farsi 3.ttf"
+        self.english_font_path = "./fonts/english/FreeMonoBold.ttf"

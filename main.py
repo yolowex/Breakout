@@ -59,6 +59,9 @@ while not event_holder.should_quit:
     if K_F3 in event_holder.pressed_keys:
         event_holder.should_render_debug = not event_holder.should_render_debug
 
+    if K_F2 in event_holder.pressed_keys:
+        event_holder.is_dev = not event_holder.is_dev
+
     if event_holder.should_render_debug:
         window.surface.blit(font(),[0,0])
 

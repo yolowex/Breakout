@@ -13,7 +13,7 @@ from Colors import Colors
 
 from Brick import Brick
 from CommonResources import CommonResources
-from Player import Player
+
 
 class Map :
 
@@ -123,6 +123,7 @@ class Map :
                     Y-self.total_gap_y*Y
                 )
                 brick = Brick(rect,color,health)
+                brick.set_bonus(50)
                 brick.edge_size = self.edge_size
                 self.bricks.append(brick)
 
@@ -142,7 +143,7 @@ class Map :
             self.bonus_list.pop(c)
 
         for brick,c in zip(self.bricks,range(len(self.bricks))):
-            if brick.health == 0:
+            if brick.health <= 0:
                 brick_destroy_list.append(c)
                 if brick.bonus is not None:
                     self.bonus_list.append(brick.bonus)

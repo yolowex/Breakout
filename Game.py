@@ -14,6 +14,7 @@ from Colors import Colors
 from Player import Player
 from Ball import Ball
 from Map import Map
+from EventHolder import EventHolder
 
 class Game :
 
@@ -59,9 +60,21 @@ class Game :
 
     def game_over_text( self ):
         game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
+        game_over_english_text = "You lose! press enter to play again!"
 
-        text_box = TextBox(game_over_text,Pos(0,0),self.window.size.x*0.7,"./fonts/farsi/farsi 3.ttf",
-            60,(0,0,0),(255,255,255,155),"rtl",True
+        target_font_path = self.assets.persian_font_path
+        direction = "rtl"
+        font_size = 60
+        text = game_over_text
+
+        if self.events.language == EventHolder.LANGUAGE_ENGLISH:
+            target_font_path = self.assets.english_font_path
+            direction = "ltr"
+            font_size = 30
+            text = game_over_english_text
+
+        text_box = TextBox(text,Pos(0,0),self.window.size.x*0.7,target_font_path,
+            font_size,(0,0,0),(255,255,255,155),direction,wholesome=True
         )
 
         return text_box.text_surface

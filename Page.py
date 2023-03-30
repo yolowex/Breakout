@@ -41,8 +41,6 @@ class Page :
         self.oneliner_list = oneliner_list
         self.surface_list: list[pg.surface.Surface] = []
         self.rect_list: list[Rect] = []
-        self.persian_font_path = "./fonts/farsi/farsi 3.ttf"
-        self.english_font_path = "./fonts/english/FreeMonoBold.ttf"
         self.persian_font_size = 65
         self.english_font_size = 40
 
@@ -61,13 +59,13 @@ class Page :
     def generate_surfaces( self ) :
         direction = "rtl"
         target_text_list = self.persian_text_list
-        target_font_path = self.persian_font_path
+        target_font_path = self.assets.persian_font_path
 
 
         if self.events.language == EventHolder.LANGUAGE_ENGLISH:
             direction = 'ltr'
             target_text_list = self.english_text_list
-            target_font_path = self.english_font_path
+            target_font_path = self.assets.english_font_path
 
         size = self.persian_font_size
         if self.events.language == EventHolder.LANGUAGE_ENGLISH:

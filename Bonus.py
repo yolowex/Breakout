@@ -18,18 +18,22 @@ from CommonResources import CommonResources
 
 class Bonus:
 
-    names_list = ["grow","shrink","speed_up","speed_down"]
+    names_list = ["grow","shrink","speed_up","speed_down","arm_up","hype_arm_up"]
 
     grow_color = Colors.GREEN
     shrink_color = Colors.RED
     speed_up_color = Colors.WHITE
     speed_down_color = Colors.BLACK
+    arm_up_color = Colors.RED.lerp(Colors.BLACK,0.5)
+    hype_arm_up_color = Colors.RED.lerp(Colors.BLUE,0.5)
 
     all_ = {
         "grow":grow_color,
         "shrink":shrink_color,
         "speed_up":speed_up_color,
-        "speed_down":speed_down_color
+        "speed_down":speed_down_color,
+        "arm_up":arm_up_color,
+        "hype_arm_up" : hype_arm_up_color
     }
 
 
@@ -67,8 +71,14 @@ class Bonus:
 
         p = self.player
 
-        cool_dict ={"grow":p.grow,"shrink":p.shrink,"speed_up":p.speed_up,
-                        "speed_down":p.speed_down}
+        cool_dict ={
+            "grow":p.grow,
+            "shrink":p.shrink,
+            "speed_up":p.speed_up,
+            "speed_down":p.speed_down,
+            "arm_up":p.arm_up,
+            "hype_arm_up":p.hype_arm_up
+        }
 
         pr = self.player.rect
 
@@ -80,10 +90,9 @@ class Bonus:
     def render_debug( self,surface:Surface ):
         ...
 
-
-
-
     def render( self,surface:Surface ):
         pg.draw.circle(surface,self.color,self.center,self.radius)
+        pg.draw.circle(surface,self.color.lerp(Colors.BLACK,0.5),self.center,self.radius,width=3)
+
 
 
