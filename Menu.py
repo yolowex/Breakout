@@ -31,7 +31,7 @@ class Menu:
         self.assets = CommonResources.assets
         self.window = CommonResources.window
 
-        self.bg = Colors.BLUE.lerp(Colors.BLACK,0.7).lerp(Colors.GRAY,0.3)
+        self.bg = Colors.BLUE.lerp(Colors.BLACK,0.7).lerp(Colors.GRAY,0.9)
 
         self.page_menu = ...
         self.level_menu = ...
@@ -44,6 +44,14 @@ class Menu:
         self.page_number = Menu.MAIN_MENU
 
         self.make_pages()
+
+
+    def relang( self ):
+        self.events.language *=-1
+        for i in self.page_dict:
+            page = self.page_dict[i]
+            if isinstance(page,Page):
+                page.update()
 
     def make_pages( self ):
         self.make_page_0()
@@ -67,21 +75,52 @@ class Menu:
         t3 = "درباره ما"
         t4 = "خروج"
 
+        e0 = "Breakout Pro!"
+        e1 = "Play Game"
+        e2 = "Settings"
+        e3 = "About us"
+        e4 = "Exit"
+
+
         text_list = [t0, t1, t2, t3, t4]
+        english_text_list = [e0,e1,e2,e3,e4]
+
         collide_list = [bool(i) for i in [0, 1, 1, 1, 1]]
         oneliner_list = [bool(i) for i in [1, 1, 1, 1, 1]]
 
         s = self.window.size
         rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.65, s.y * 0.8])
 
-        self.page_menu = Page(rect, text_list, collide_list,oneliner_list)
+        self.page_menu = Page(rect, text_list,english_text_list, collide_list,oneliner_list)
+        self.page_menu.gap_y = 0.5
+        self.page_menu.update()
 
 
     def make_page_1( self ):
         ...
 
     def make_page_2( self ):
-        ...
+
+        t0 = "تنظیمات"
+        t1 = "زبان: فارسی"
+        t2 = "بازگشت"
+
+        e0 = "Settings"
+        e1 = "Language: English"
+        e2 = "Back"
+
+        text_list = [t0, t1, t2]
+        english_text_list = [e0,e1,e2]
+
+        collide_list = [bool(i) for i in [0, 1, 1]]
+        oneliner_list = [bool(i) for i in [1, 1, 1]]
+
+        s = self.window.size
+        rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.65, s.y * 0.8])
+
+        self.page_settings = Page(rect, text_list,english_text_list, collide_list, oneliner_list)
+        self.page_settings.gap_y = 0.7
+        self.page_settings.update()
 
     def make_page_3( self ):
         t0 = "این بازی برای دوره آموزش پروژه محور کتابخانه پایگیم در سایت تاپلرن"\
@@ -89,30 +128,42 @@ class Menu:
 
         t1 = "بازگشت"
 
+        e0 = "This is a game I made for an educational course I'm going to publish on toplearn.com." \
+             " This project" \
+            " resides at: github.com/mmdmoa/Breakout ."
+        e1 = "Back"
 
         text_list = [t0, t1]
+        english_text_list = [e0,e1]
+
         collide_list = [bool(i) for i in [0, 1]]
         oneliner_list = [bool(i) for i in [0, 1]]
 
         s = self.window.size
         rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.8, s.y * 0.8])
 
-        self.page_about_us = Page(rect, text_list, collide_list, oneliner_list)
+        self.page_about_us = Page(rect, text_list,english_text_list, collide_list, oneliner_list)
 
     def make_page_4( self ):
-        t0 = "آیا مطمئنید میخواهید از بازی خارج شوید؟"
+        t0 = "آیا مطمئنید میخواهید از بازی خارج شوید؟ "
         t1 = "بله"
         t2 = "خیر"
 
+        e0 = "Are you sure you are willing to give up and leave the game?"
+        e1 = "Oh sure I give up"
+        e2 = "No way, i\'m in"
+
 
         text_list = [t0, t1, t2]
+        english_text_list = [e0,e1,e2]
+
         collide_list = [bool(i) for i in [0, 1, 1]]
         oneliner_list = [bool(i) for i in [0, 1, 1]]
 
         s = self.window.size
         rect = Rect([s.x * 0.01, s.y * 0.15, s.x * 0.98, s.y * 0.7])
 
-        self.page_exit = Page(rect, text_list, collide_list,oneliner_list)
+        self.page_exit = Page(rect, text_list,english_text_list, collide_list,oneliner_list)
 
 
     @property
@@ -145,7 +196,10 @@ class Menu:
             elif self.page_number == Menu.LEVEL_MENU:
                 ...
             elif self.page_number == Menu.SETTINGS_MENU:
-                ...
+                if c == 1:
+                    self.relang()
+                elif c == 2:
+                    self.page_number = Menu.MAIN_MENU
             elif self.page_number == Menu.ABOUT_US:
                 if c == 1:
                     self.page_number = Menu.MAIN_MENU

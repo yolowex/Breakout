@@ -9,18 +9,19 @@ from Colors import Colors
 
 from pygame.surface import Surface
 
+from EventHolder import EventHolder
+
 from modules.mygame.drawables import TextBox
 from modules.mygame.structures import Pos
-
 from CommonResources import CommonResources
 
 
 class Page :
-    LANGUAGE_PERSIAN = 0
-    LANGUAGE_ENGLISH = 1
 
 
-    def __init__( self, rect: Rect, text_list: list[str], collide_list: list[bool],
+
+    def __init__( self, rect: Rect, persian_text_list: list[str],english_text_list: list[str],
+            collide_list: list[bool],
             oneliner_list: list[bool] ) :
 
         self.events = CommonResources.event_holder
@@ -28,27 +29,54 @@ class Page :
         self.assets = CommonResources.assets
         self.window = CommonResources.window
 
+        self.text_color = Colors.BLACK
+        self.bg_color = pg.color.Color(Colors.WHITE)
+        self.bg_color.a = 155
         self.rect = rect
         self.gap_y = 0.1
 
-        self.text_list = text_list
+        self.persian_text_list = persian_text_list
+        self.english_text_list = english_text_list
         self.collide_list = collide_list
         self.oneliner_list = oneliner_list
         self.surface_list: list[pg.surface.Surface] = []
         self.rect_list: list[Rect] = []
-        self.persian_font_path = "./fonts/farsi/farsi 512.ttf"
-        self.english_font_path = "./english"
-        self.language = Page.LANGUAGE_PERSIAN
+        self.persian_font_path = "./fonts/farsi/farsi 3.ttf"
+        self.english_font_path = "./fonts/english/FreeMonoBold.ttf"
+        self.persian_font_size = 65
+        self.english_font_size = 40
 
-        self.generate_surfaces()
-        self.generate_rects()
+        self.update()
         self.current_collision = None
 
+    def reset( self ):
+        self.surface_list.clear()
+        self.rect_list.clear()
+
+    def update( self ):
+        self.reset()
+        self.generate_surfaces()
+        self.generate_rects()
 
     def generate_surfaces( self ) :
-        for text,oneliner in zip(self.text_list,self.oneliner_list) :
-            text_box = TextBox(text, Pos(0, 0), self.rect.width, self.persian_font_path, 60,
-                tuple(Colors.WHITE), tuple(Colors.BLACK), "rtl", oneliner=oneliner)
+        direction = "rtl"
+        target_text_list = self.persian_text_list
+        target_font_path = self.persian_font_path
+
+
+        if self.events.language == EventHolder.LANGUAGE_ENGLISH:
+            direction = 'ltr'
+            target_text_list = self.english_text_list
+            target_font_path = self.english_font_path
+
+        size = self.persian_font_size
+        if self.events.language == EventHolder.LANGUAGE_ENGLISH:
+            size = self.english_font_size
+
+        for text,oneliner in zip(target_text_list,self.oneliner_list) :
+            text_box = TextBox(text, Pos(0, 0), self.rect.width, target_font_path, size,
+                tuple(Colors.BLACK), tuple(Colors.GLASS), direction, oneliner=oneliner
+                ,wholesome=True)
             self.surface_list.append(text_box.text_surface)
 
 
@@ -72,8 +100,8 @@ class Page :
         m_rect.y -= 1
 
         self.current_collision = None
-        for rect, text, collides, c in zip(self.rect_list, self.text_list, self.collide_list,
-                range(len(self.text_list))) :
+        for rect, text, collides, c in zip(self.rect_list, self.persian_text_list, self.collide_list,
+                range(len(self.persian_text_list))) :
             if m_rect.colliderect(rect) and collides :
                 self.current_collision = c
 
@@ -83,6 +111,11 @@ class Page :
 
 
     def render( self, surface: Surface ) :
+        this_surface = Surface(self.rect.size).convert_alpha()
+        this_surface.fill(self.bg_color)
+
+        surface.blit(this_surface,self.rect)
+
         for text_surface, rect in zip(self.surface_list, self.rect_list) :
             surface.blit(text_surface, rect)
 

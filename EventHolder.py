@@ -8,6 +8,10 @@ import random as r
 
 
 class EventHolder:
+    LANGUAGE_PERSIAN = -1
+    LANGUAGE_ENGLISH = 1
+
+
     def __init__(self):
         self.pressed_keys = []
         self.released_keys = []
@@ -27,6 +31,7 @@ class EventHolder:
         self.game_over = False
         self.determined_fps = 60
         self.final_fps = 0
+        self.language = EventHolder.LANGUAGE_ENGLISH
 
     def get_events( self ):
         self.pressed_keys.clear()
