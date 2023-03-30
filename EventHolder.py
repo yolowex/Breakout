@@ -7,22 +7,21 @@ from pygame.surface import Surface
 import random as r
 
 
-class EventHolder:
+class EventHolder :
     LANGUAGE_PERSIAN = -1
     LANGUAGE_ENGLISH = 1
 
 
-    def __init__(self):
+    def __init__( self ) :
         self.pressed_keys = []
         self.released_keys = []
         self.held_keys = []
 
-
         self.mouse_moved = False
-        self.mouse_pos = Pos(0,0)
-        self.mouse_pressed_keys = [False,False,False]
-        self.mouse_released_keys = [False,False,False]
-        self.mouse_held_keys = [False,False,False]
+        self.mouse_pos = Pos(0, 0)
+        self.mouse_pressed_keys = [False, False, False]
+        self.mouse_released_keys = [False, False, False]
+        self.mouse_held_keys = [False, False, False]
         self.mouse_focus = False
 
         self.should_render_debug = True
@@ -31,41 +30,46 @@ class EventHolder:
         self.game_over = False
         self.determined_fps = 60
         self.final_fps = 0
+        self.current_level = 1
         self.language = EventHolder.LANGUAGE_ENGLISH
 
-    def get_events( self ):
+
+    def get_events( self ) :
         self.pressed_keys.clear()
         self.released_keys.clear()
         self.mouse_pressed_keys = [False, False, False]
         self.mouse_released_keys = [False, False, False]
         self.mouse_focus = pg.mouse.get_focused()
         self.mouse_moved = False
-        for i in pg.event.get():
-            if i.type == WINDOWENTER or MOUSEMOTION:
+        for i in pg.event.get() :
+            if i.type == WINDOWENTER or MOUSEMOTION :
                 self.mouse_pos = Pos(pg.mouse.get_pos())
 
-            if i.type == MOUSEMOTION:
+            if i.type == MOUSEMOTION :
                 self.mouse_moved = True
 
-            if i.type == QUIT or i.type == KEYDOWN and i.key == K_ESCAPE:
+            if i.type == QUIT or (i.type == KEYDOWN and
+                    i.key == K_ESCAPE and not self.should_run_game) :
+
                 self.should_quit = True
 
-            if i.type == KEYDOWN:
+            if i.type == KEYDOWN and i.key == K_ESCAPE and self.should_run_game :
+                self.should_run_game = False
+
+            if i.type == KEYDOWN :
                 self.pressed_keys.append(i.key)
-                if i.key not in self.held_keys:
+                if i.key not in self.held_keys :
                     self.held_keys.append(i.key)
 
-            if i.type == KEYUP:
+            if i.type == KEYUP :
                 self.released_keys.append(i.key)
-                if i.key in self.held_keys:
+                if i.key in self.held_keys :
                     self.held_keys.remove(i.key)
 
-
-            if i.type == MOUSEBUTTONDOWN:
+            if i.type == MOUSEBUTTONDOWN :
                 self.mouse_pressed_keys = list(pg.mouse.get_pressed())
                 self.mouse_held_keys = list(pg.mouse.get_pressed())
 
-            if i.type == MOUSEBUTTONUP:
+            if i.type == MOUSEBUTTONUP :
                 self.mouse_released_keys = list(pg.mouse.get_pressed())
                 self.mouse_held_keys = list(pg.mouse.get_pressed())
-

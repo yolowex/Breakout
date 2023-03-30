@@ -16,6 +16,14 @@ from modules.mygame.structures import Pos
 from CommonResources import CommonResources
 
 from Page import Page
+import json
+
+file = open("./Maps/all_maps.json").read()
+
+all_maps:dict = json.loads(file)
+root = "./Maps/"
+all_maps = {int(key):root+value for key,value in all_maps.items()}
+
 
 class Menu:
 
@@ -25,16 +33,18 @@ class Menu:
     ABOUT_US = 3
     EXIT = 4
 
+
     def __init__( self ) :
         self.events = CommonResources.event_holder
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
         self.window = CommonResources.window
+        self.game = CommonResources.game
 
         self.bg = Colors.BLUE.lerp(Colors.BLACK,0.7).lerp(Colors.GRAY,0.9)
 
         self.page_menu = ...
-        self.level_menu = ...
+        self.page_level = ...
         self.page_settings = ...
         self.page_about_us = ...
         self.page_exit = ...
@@ -42,6 +52,7 @@ class Menu:
         self.page_dict = {}
 
         self.page_number = Menu.MAIN_MENU
+
 
         self.make_pages()
 
@@ -53,20 +64,20 @@ class Menu:
             if isinstance(page,Page):
                 page.update()
 
+    def update_dict( self ):
+        self.page_dict = {Menu.MAIN_MENU : self.page_menu, Menu.LEVEL_MENU : self.page_level,
+            Menu.SETTINGS_MENU : self.page_settings, Menu.ABOUT_US : self.page_about_us,
+            Menu.EXIT : self.page_exit}
+
     def make_pages( self ):
         self.make_page_0()
         self.make_page_1()
         self.make_page_2()
         self.make_page_3()
         self.make_page_4()
+        self.update_dict()
 
-        self.page_dict = {
-            Menu.MAIN_MENU: self.page_menu,
-            Menu.LEVEL_MENU: self.level_menu,
-            Menu.SETTINGS_MENU: self.page_settings,
-            Menu.ABOUT_US: self.page_about_us,
-            Menu.EXIT: self.page_exit
-        }
+
 
     def make_page_0( self ):
         t0 = "آجر شکن حرفه ای!"
@@ -96,8 +107,43 @@ class Menu:
         self.page_menu.update()
 
 
+    @property
+    def level_english_text( self ):
+        text = f"Level {self.events.current_level}"
+        return text
+
+    @property
+    def level_persian_text( self ) :
+        text = "مرحله "
+        text += f"{self.events.current_level}"
+        return text
+
+
     def make_page_1( self ):
-        ...
+        t0 = self.level_persian_text
+        t1 = "مرحله بعد"
+        t2 = "مرحله قبل"
+        t3 = "شروع بازی"
+        t4 = "بازگشت"
+
+        e0 = self.level_english_text
+        e1 = "Next Level"
+        e2 = "Previous Level"
+        e3 = "Play"
+        e4 = "Back"
+
+        text_list = [t0, t1, t2, t3, t4]
+        english_text_list = [e0, e1, e2, e3, e4]
+
+        collide_list = [bool(i) for i in [0, 1, 1, 1, 1]]
+        oneliner_list = [bool(i) for i in [1, 1, 1, 1, 1]]
+
+        s = self.window.size
+        rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.65, s.y * 0.8])
+
+        self.page_level = Page(rect, text_list, english_text_list, collide_list, oneliner_list)
+        self.page_level.gap_y = 0.5
+        self.page_level.update()
 
     def make_page_2( self ):
 
@@ -165,6 +211,9 @@ class Menu:
 
         self.page_exit = Page(rect, text_list,english_text_list, collide_list,oneliner_list)
 
+    @property
+    def current_level_path( self ):
+        return all_maps[self.events.current_level]
 
     @property
     def current_page( self ) -> Page:
@@ -177,24 +226,41 @@ class Menu:
             c = self.current_page.current_collision
             if self.page_number == Menu.MAIN_MENU:
                 if c == 1:
-                    print('it\'s game!')
                     self.page_number = Menu.LEVEL_MENU
 
                 elif c == 2:
-                    print('it\'s settings!')
                     self.page_number = Menu.SETTINGS_MENU
 
                 elif c == 3:
-                    print('it\'s me!')
                     self.page_number = Menu.ABOUT_US
 
                 elif c == 4:
-                    print('it\'s exit!')
                     self.page_number = Menu.EXIT
 
 
             elif self.page_number == Menu.LEVEL_MENU:
-                ...
+                if c == 1:
+                    next_level = self.events.current_level + 1
+                    if next_level in all_maps:
+                        self.events.current_level = next_level
+                        self.make_page_1()
+                        self.page_level.update()
+                        self.update_dict()
+                elif c == 2:
+                    next_level = self.events.current_level - 1
+
+                    if next_level in all_maps:
+                        self.events.current_level = next_level
+                        self.make_page_1()
+                        self.page_level.update()
+                        self.update_dict()
+                elif c == 3:
+                    self.events.should_run_game = True
+                    self.game.reload(self.current_level_path)
+                elif c == 4:
+                    self.page_number = Menu.MAIN_MENU
+
+
             elif self.page_number == Menu.SETTINGS_MENU:
                 if c == 1:
                     self.relang()

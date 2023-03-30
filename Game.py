@@ -47,13 +47,19 @@ class Game :
 
         self.bg = self.colors.BLUE.lerp(self.colors.WHITE, 0.7)
 
+    def reload( self,path:str ):
+        self.events.game_over = False
+        self.map_.reload(path)
+        self.player.reset()
+        self.ball.reset()
+
     def get_screen_shot( self ):
         self.screen_shot = self.window.surface.copy()
 
     def game_over_text( self ):
         game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
 
-        text_box = TextBox(game_over_text,Pos(0,0),self.window.size.x*0.7,"./farsi/farsi 155.ttf",
+        text_box = TextBox(game_over_text,Pos(0,0),self.window.size.x*0.7,"./fonts/farsi/farsi 3.ttf",
             60,(0,0,0),(255,255,255,155),"rtl",True
         )
 
