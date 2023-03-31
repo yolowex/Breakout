@@ -16,11 +16,22 @@ from functions import *
 
 import random as r
 
+from Ball import Ball
+
 from CommonResources import CommonResources
 
 class Bonus:
 
-    names_list = ["grow","shrink","speed_up","speed_down","arm_up","hype_arm_up"]
+    names_list = [
+        "grow",
+        "shrink",
+        "speed_up",
+        "speed_down",
+        "arm_up",
+        "hype_arm_up",
+        "fireball",
+        "multiball",
+    ]
 
     grow_color = Colors.GREEN
     shrink_color = Colors.RED
@@ -28,6 +39,9 @@ class Bonus:
     speed_down_color = Colors.BLACK
     arm_up_color = Colors.RED.lerp(Colors.BLACK,0.5)
     hype_arm_up_color = Colors.RED.lerp(Colors.BLUE,0.5)
+    fireball_color = Colors.RED.lerp(Colors.WHITE,0.7)
+    multiball_color = Colors.GREEN.lerp(Colors.RED,0.5)
+
 
     all_ = {
         "grow":grow_color,
@@ -35,7 +49,9 @@ class Bonus:
         "speed_up":speed_up_color,
         "speed_down":speed_down_color,
         "arm_up":arm_up_color,
-        "hype_arm_up" : hype_arm_up_color
+        "hype_arm_up" : hype_arm_up_color,
+        "fireball": fireball_color,
+        "multiball": multiball_color
     }
 
 
@@ -65,13 +81,18 @@ class Bonus:
             self.radius * 2
         )
 
+    @property
+    def ball( self ):
+        return CommonResources.game.ball
+
     def update( self ):
         self.player = CommonResources.player
 
     def check_events( self ):
         self.center.y += self.fall_speed * (self.radius * 2)
 
-        p = self.player
+        p: Player = self.player
+        b: Ball = self.ball
 
         cool_dict ={
             "grow":p.grow,
@@ -79,7 +100,9 @@ class Bonus:
             "speed_up":p.speed_up,
             "speed_down":p.speed_down,
             "arm_up":p.arm_up,
-            "hype_arm_up":p.hype_arm_up
+            "hype_arm_up":p.hype_arm_up,
+            "fireball": b.ignite,
+            "multiball": b.divide
         }
 
         pr = self.player.rect

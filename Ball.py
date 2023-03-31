@@ -357,6 +357,8 @@ class Ball:
 
         self.center = c
 
+    def ignite( self ):
+        self.on_fire_timer = now()
 
     def swap( self,ball ):
         self.pos = ball.pos

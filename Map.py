@@ -127,7 +127,7 @@ class Map :
                     Y-self.total_gap_y*Y
                 )
                 brick = Brick(rect,color,health)
-                brick.set_bonus(20)
+                brick.set_bonus(60)
                 brick.edge_size = self.edge_size
                 self.bricks.append(brick)
 
