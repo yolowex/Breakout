@@ -59,16 +59,18 @@ def RectCircleCollision(circle_center:Pos,circle_radius,rect:Rect):
 
     return dx*dx+dy*dy<=(circle_radius*circle_radius)
 
-def get_video_frames(path:str) -> list[pg.surface.Surface]:
+
+
+def get_video_frames(path:str,max_frame=100,read_counter=5) -> list[pg.surface.Surface]:
     L = []
 
     video = cv2.VideoCapture(path)
 
-    read_counter = 5
     c = 0
     while True:
         c+=1
-
+        if len(L)>=max_frame:
+            break
         s,v = video.read()
         if s:
             video_surf = pg.image.frombuffer(v.tobytes(), v.shape[1 : :-1],

@@ -30,8 +30,8 @@ class Page :
         self.window = CommonResources.window
 
         self.text_color = Colors.BLACK
-        self.bg_color = pg.color.Color(Colors.WHITE)
-        self.bg_color.a = 155
+        self.bg_color = Colors.WHITE
+        self.bg_color.a = 185
         self.rect = rect
         self.gap_y = 0.1
 
@@ -116,6 +116,8 @@ class Page :
 
         for text_surface, rect in zip(self.surface_list, self.rect_list) :
             surface.blit(text_surface, rect)
+
+        pg.draw.rect(surface, Colors.BLACK, self.rect, width=3)
 
         if self.events.should_render_debug :
             self.render_debug(surface)

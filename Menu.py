@@ -177,7 +177,7 @@ class Menu:
         oneliner_list = [bool(i) for i in [1, 1, 1, 1, 1]]
 
         s = self.window.size
-        rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.65, s.y * 0.8])
+        rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.75, s.y * 0.60])
 
         self.page_level = Page(rect, text_list, english_text_list, collide_list, oneliner_list)
         self.page_level.gap_y = 0.5
@@ -212,7 +212,7 @@ class Menu:
 
         t1 = "بازگشت"
 
-        e0 = "This is a game I made for an educational course I'm going to publish on toplearn.com." \
+        e0 = "This game was made by mohammad moein azari." \
              " This project" \
             " resides at: github.com/mmdmoa/Breakout ."
         e1 = "Back"
@@ -234,7 +234,7 @@ class Menu:
         t2 = "خیر"
 
         e0 = "Are you sure you are willing to give up and leave the game?"
-        e1 = "Oh sure I give up"
+        e1 = "Yes"
         e2 = "No way, i\'m in"
 
 

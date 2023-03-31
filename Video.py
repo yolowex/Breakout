@@ -11,7 +11,7 @@ class Video:
         self.frames.pop(-1)
 
         self.hopper = 0
-        self.hopper_interval = 3
+        self.hopper_interval = 5
 
         self.frame_index = 0
         self.pos = Pos(0,0)
@@ -20,7 +20,7 @@ class Video:
         self.size = Pos(s.x * self.size_scale.x, s.y * self.size_scale.y)
         self.fix()
         self.transform()
-
+        print(len(self.frames))
 
 
     def fix( self ):
