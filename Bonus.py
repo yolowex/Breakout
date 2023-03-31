@@ -43,11 +43,11 @@ class Bonus :
 
     grow_color = Colors.GREEN
     shrink_color = Colors.RED
-    speed_up_color = Colors.WHITE
+    speed_up_color = Colors.BLACK.lerp(Colors.WHITE,0.8)
     speed_down_color = Colors.BLACK
     arm_up_color = Colors.RED.lerp(Colors.BLACK, 0.5)
     hype_arm_up_color = Colors.RED.lerp(Colors.BLUE, 0.5)
-    fireball_color = Colors.RED.lerp(Colors.WHITE, 0.7)
+    fireball_color = Color("#780000")
     multiball_color = Colors.GREEN.lerp(Colors.RED, 0.5)
 
     all_ = {GROW : grow_color, SHRINK : shrink_color, SPEED_UP : speed_up_color,
@@ -72,10 +72,17 @@ class Bonus :
         self.center = center
         self.radius = radius
         if self.name == Bonus.MULTIBALL : self.radius *= 1.5
+        if self.name == Bonus.SHRINK: self.radius *= r.uniform(0.5,1)
+        if self.name == Bonus.SPEED_DOWN: self.radius *= r.uniform(0.5,1)
         self.tail = []
         self.color = color
-        self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.7, 2)
 
+        if self.name == Bonus.FIREBALL:
+            self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(2, 4)
+        else:
+            self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.5, 2)
+
+        if self.name == Bonus.SHRINK: self.fall_speed *= 2
 
     @property
     def multiball_top( self ) :
@@ -112,6 +119,12 @@ class Bonus :
 
         if self.name == Bonus.ARM_UP:
             return self.player.bullets_color
+
+        if self.name == Bonus.SPEED_UP:
+            noise = [rr(-50,50) for _ in range(3)]
+            new_color = [self.color.r + noise[0],self.color.g + noise[1],self.color.b+noise[2]]
+            new_color = [cap(i,0,255) for i in new_color]
+            return Color(new_color)
 
         return self.color
 
@@ -151,6 +164,13 @@ class Bonus :
             self.angle += 0.7
         elif self.name == Bonus.ARM_UP :
             self.angle -= 0.35
+        elif self.name == Bonus.SPEED_UP:
+            self.center.x += rr(-1,1)
+            self.center.y += rr(-1,1)
+        elif self.name == Bonus.SPEED_DOWN:
+            diff = self.player.rect.center[0] - self.center.x
+            if diff!=0:
+                self.center.x += (diff/abs(diff)) * self.fall_speed * (self.radius * 2) * 0.2
 
         if self.name == Bonus.FIREBALL:
             self.check_fire_tail_events()
@@ -219,6 +239,12 @@ class Bonus :
         for center, radius, color in self.tail :
             pg.draw.circle(surface, color, center, radius)
 
+        pg.draw.circle(surface, self.color, self.center,self.radius)
+
+    def render_speed_up( self,surface:Surface ):
+        pg.draw.circle(surface,self.this_color,self.center,self.radius)
+        pg.draw.circle(surface, self.this_color.lerp(Colors.BLACK, 0.5), self.center, self.radius,
+            width=3)
 
     def render( self, surface: Surface ) :
         if self.name == Bonus.MULTIBALL :
@@ -235,6 +261,10 @@ class Bonus :
 
         if self.name == Bonus.FIREBALL:
             self.render_fireball(surface)
+            return
+
+        if self.name == Bonus.SPEED_UP:
+            self.render_speed_up(surface)
             return
 
         pg.draw.circle(surface, self.this_color, self.center, self.radius)

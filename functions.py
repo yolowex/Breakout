@@ -31,6 +31,11 @@ def polygon( surface, color, center: Pos, radius, edges, angle=0,width=0 ) :
 
     return pg.draw.polygon(surface, color, points,width=width)
 
+def cap(num,min_,max_):
+    if num < min_: num = min_
+    if num > max_: num = max_
+    return num
+
 def rotate(origin, point, angle):
     angle = math.radians(angle)
     ox, oy = origin

@@ -134,7 +134,7 @@ class Map :
                 section = Bonus.by_number[section_id]
                 if section not in ['empty','none']:
                     bonus_name = r.choice(Bonus.section_dict[section])
-                    brick.set_bonus(75,bonus_name=bonus_name)
+                    brick.set_bonus(40,bonus_name=bonus_name)
 
 
                 brick.edge_size = self.edge_size
@@ -147,7 +147,10 @@ class Map :
         bonus_destroy_list = []
 
         for bonus,c in zip(self.bonus_list,range(len(self.bonus_list))):
-            if (bonus.center.y - bonus.radius) > self.window.size.y or bonus.consumed:
+            if bonus.name == Bonus.SHRINK and (bonus.center.y - bonus.radius) > self.window.size.y:
+                bonus.center.y = -bonus.radius
+
+            elif (bonus.center.y - bonus.radius) > self.window.size.y or bonus.consumed:
                 bonus_destroy_list.append(c)
             else:
                 bonus.check_events()

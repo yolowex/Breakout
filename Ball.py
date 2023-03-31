@@ -115,7 +115,7 @@ class Ball:
         c = self.center
         a = self.angle
 
-        ran_factor = 5
+        ran_factor = 1
         ran = lambda: r.randint(-ran_factor,ran_factor)
         was_swapped = False
         if c.x < 0 + self.size.x / 2 : # LEFT
@@ -173,9 +173,8 @@ class Ball:
             if 0 < a < 90 :
                 self.angle = 90 + abs(90 - a) + ran()
 
-        if c.y > self.window.size.y - self.size.y / 2 : # DOWN
+        if c.y > self.window.size.y: # DOWN
             self.angle = 180
-            c.y = self.window.size.y - self.size.y / 2
 
             if self.is_sub_ball:
                 self.destroyed = True
@@ -228,6 +227,7 @@ class Ball:
             reflection_degree = (120 / 200) * reflection_percent - 120 / 2
 
             self.angle = reflection_degree
+
 
     def check_map_collisions( self ):
         ran_factor = 5
