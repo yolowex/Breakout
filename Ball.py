@@ -23,7 +23,7 @@ def rotate(origin, point, angle):
 now = lambda: pg.time.get_ticks() / 1000
 
 class Ball:
-    def __init__(self,rect:Rect,color:Color):
+    def __init__(self,rect:Rect,color:Color,is_sub_ball:bool = False ):
         self.events = CommonResources.event_holder
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
@@ -39,6 +39,15 @@ class Ball:
         self.color = color
         self.tail: list[list[Pos, float, Color]] = []  # list of tuple(center,radius,color)
 
+        self.is_sub_ball = is_sub_ball
+        self.destroyed = False
+        if self.is_sub_ball:
+            self.sub_balls = None
+        else:
+            self.sub_balls = []
+
+
+
         self.top_pos_distance = 50
         self.speed = 0.05
 
@@ -50,6 +59,9 @@ class Ball:
 
     def reset( self ):
         p_rect = self.player.rect
+        if self.sub_balls is not None:
+            self.sub_balls.clear()
+
         rect = self.rect
         rect.center = p_rect.center
         rect.y = p_rect.y - rect.height
@@ -98,7 +110,7 @@ class Ball:
 
         ran_factor = 5
         ran = lambda: r.randint(-ran_factor,ran_factor)
-
+        was_swapped = False
         if c.x < 0 + self.size.x / 2 : # LEFT
             c.x = self.size.x / 2
 
@@ -158,8 +170,18 @@ class Ball:
             self.angle = 180
             c.y = self.window.size.y - self.size.y / 2
 
-            self.events.game_over = True
-            self.game.get_screen_shot()
+            if self.is_sub_ball:
+                self.destroyed = True
+            else:
+                if len(self.sub_balls):
+                    ball = self.sub_balls[0]
+                    self.sub_balls.pop(0)
+                    self.swap(ball)
+                    print('it\s swapped',self.rect)
+                    was_swapped = True
+                else:
+                    self.events.game_over = True
+                    self.game.get_screen_shot()
 
 
             # c.y = self.window.size.y - self.size.y / 2
@@ -180,8 +202,8 @@ class Ball:
             #     self.angle = 270 + abs(270 - a) + ran()
 
 
-
-        self.center = c
+        if not was_swapped:
+            self.center = c
 
     def check_player_collision( self ):
 
@@ -245,8 +267,6 @@ class Ball:
 
 
                 if final_bias == 'none':
-                    # print("Error, invalid bias: ",vertical_bias,horizontal_bias,final_bias)
-                    # print(self.rect,self.center,brick.rect)
                     if vertical_bias == 'between' and horizontal_bias =='between':
                         self.angle += 180 + r.randint(-30,30)
                         return
@@ -338,6 +358,12 @@ class Ball:
         self.center = c
 
 
+    def swap( self,ball ):
+        self.pos = ball.pos
+        self.size = ball.size
+        self.color = ball.color
+        self.on_fire_timer = -100
+        self.angle = ball.angle
 
     def move( self ):
 
@@ -353,9 +379,7 @@ class Ball:
 
     def check_fire_tail_events( self ):
 
-        if self.events.is_dev:
-            if K_r in self.events.pressed_keys:
-                self.on_fire_timer = now()
+
 
         c = 0
         for _, radius, _ in self.tail :
@@ -376,10 +400,37 @@ class Ball:
 
 
 
+    def divide( self ):
+        if self.is_sub_ball:
+            return
+
+        ball_1 = Ball(self.rect,self.color,True)
+        ball_1.angle = self.angle + rr(20,40)
+        ball_2 = Ball(self.rect,self.color,True)
+        ball_2.angle = self.angle - rr(20,40)
+
+        self.sub_balls.extend([ball_1,ball_2])
 
 
 
     def check_events( self ):
+
+        if self.events.is_dev and not self.is_sub_ball:
+            if K_r in self.events.pressed_keys:
+                self.on_fire_timer = now()
+
+            if K_t in self.events.pressed_keys:
+                self.divide()
+
+
+        if self.sub_balls is not None:
+            for ball,c in zip(self.sub_balls,range(len(self.sub_balls))):
+                if ball.destroyed:
+                    self.sub_balls.pop(c)
+                    break
+                else:
+                    ball.check_events()
+
         self.check_fire_tail_events()
 
         self.angle = self.angle % 360
@@ -392,6 +443,9 @@ class Ball:
 
 
     def render( self,surface:Surface ):
+        if self.sub_balls is not None :
+            for ball in self.sub_balls:
+                ball.render(surface)
 
         for center,radius,color in self.tail:
             pg.draw.circle(surface,color,center,radius)
