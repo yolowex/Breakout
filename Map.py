@@ -10,10 +10,11 @@ from typing import Optional
 from random import randint as rr
 from pygame.surface import Surface
 from Colors import Colors
-
+from Bonus import Bonus
 from Brick import Brick
 from CommonResources import CommonResources
 
+now = lambda: pg.time.get_ticks() / 1000
 
 class Map :
 
@@ -33,6 +34,7 @@ class Map :
 
         self.colors = {}
         self.health_rows = []
+        self.bonus_rows = []
         self.bricks = []
         self.bonus_list = []
         self.edge_size = 0
@@ -59,11 +61,10 @@ class Map :
 
     def reload( self,path:str = None ):
         if path is None: path = self.path
+
         self.reset()
         self.load(path)
         self.create_tiles()
-
-
 
 
     def load( self,path:str ):
@@ -81,6 +82,7 @@ class Map :
         self.player.edge = int(j['paddle_edge_size'])
         self.name = j['name']
         self.health_rows = j["health_rows"]
+        self.bonus_rows = j['bonus_rows']
         self.rect = Rect(
                         j['rect_x'] * self.window.size.x,
                         j['rect_y'] * self.window.size.y,
@@ -110,8 +112,10 @@ class Map :
         Y = self.rect.height / len(self.health_rows)
 
 
-        for y,row in zip(range(len(self.health_rows)),self.health_rows):
-            for x,health in zip(range(len(row)),row):
+        for y,row,bonus_row in zip(range(len(self.health_rows)),self.health_rows,self.bonus_rows):
+            for x,health,section_id in zip(range(len(row)),row,bonus_row):
+                # print(bonus,Bonus.by_number[int(bonus)])
+
                 if health <= 0: continue
 
                 X = self.rect.width / len(row)
@@ -127,8 +131,15 @@ class Map :
                     Y-self.total_gap_y*Y
                 )
                 brick = Brick(rect,color,health)
-                brick.set_bonus(60)
+
+                section = Bonus.by_number[section_id]
+                if section not in ['empty','none']:
+                    bonus_name = r.choice(Bonus.section_dict[section])
+                    brick.set_bonus(75,bonus_name=bonus_name)
+
+
                 brick.edge_size = self.edge_size
+                brick.font_time = now()
                 self.bricks.append(brick)
 
     def check_events( self ) :

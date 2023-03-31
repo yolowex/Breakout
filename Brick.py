@@ -40,11 +40,16 @@ class Brick:
         self.health -= 1
         self.font_time = now()
 
-    def set_bonus( self,chance_percent:int ):
-        l = [0] * (100-chance_percent)
-        l += [1] * chance_percent
-        if r.choice(l):
-            bonus_name = r.choice(Bonus.names_list)
+    def set_bonus( self,chance_percent:int=None,bonus_name:str = None ):
+        l = []
+        if chance_percent is not None:
+            l = [0] * (100-chance_percent)
+            l += [1] * chance_percent
+
+        if chance_percent is None or r.choice(l):
+            if bonus_name is None:
+                bonus_name = r.choice(Bonus.names_list)
+
             self.bonus = Bonus(bonus_name,
                 self.rect.center,
                 min([self.rect.width,self.rect.height])/4,

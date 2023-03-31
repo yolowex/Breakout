@@ -46,21 +46,22 @@ class Ball:
         else:
             self.sub_balls = []
 
-
-
         self.top_pos_distance = 50
         self.speed = 0.05
 
         self.angle = 180
 
         self.on_fire_timer = -100
-        self.on_fire_duration = 5
+        self.on_fire_duration = 7.5
 
 
     def reset( self ):
         p_rect = self.player.rect
         if self.sub_balls is not None:
             self.sub_balls.clear()
+
+        self.tail.clear()
+        self.on_fire_timer = -100
 
         rect = self.rect
         rect.center = p_rect.center
@@ -177,7 +178,6 @@ class Ball:
                     ball = self.sub_balls[0]
                     self.sub_balls.pop(0)
                     self.swap(ball)
-                    print('it\s swapped',self.rect)
                     was_swapped = True
                 else:
                     self.events.game_over = True
@@ -359,6 +359,10 @@ class Ball:
 
     def ignite( self ):
         self.on_fire_timer = now()
+        if not self.is_sub_ball:
+            for ball in self.sub_balls:
+                ball.ignite()
+
 
     def swap( self,ball ):
         self.pos = ball.pos
@@ -381,8 +385,6 @@ class Ball:
 
     def check_fire_tail_events( self ):
 
-
-
         c = 0
         for _, radius, _ in self.tail :
             radius *= 0.95
@@ -397,6 +399,10 @@ class Ball:
         center = self.center
         radius = self.radius
         color = self.fire_color
+        x = self.radius // 2
+        noise = Pos(r.randint(-x,x),r.randint(-x,x))
+        center.x += noise.x
+        center.y += noise.y
         self.tail.append([center,radius,color])
 
 
@@ -419,7 +425,7 @@ class Ball:
 
         if self.events.is_dev and not self.is_sub_ball:
             if K_r in self.events.pressed_keys:
-                self.on_fire_timer = now()
+                self.ignite()
 
             if K_t in self.events.pressed_keys:
                 self.divide()

@@ -33,6 +33,20 @@ class Bonus:
         "multiball",
     ]
 
+    by_number = {
+        0:"none",
+        1:"empty",
+        2:"bad",
+        3:"good",
+        4:"best"
+    }
+
+    section_dict = {
+        "bad":["shrink","speed_down"],
+        "good":['arm_up','multiball',"grow","speed_up"],
+        "best":["fireball","hype_arm_up"]
+    }
+
     grow_color = Colors.GREEN
     shrink_color = Colors.RED
     speed_up_color = Colors.WHITE

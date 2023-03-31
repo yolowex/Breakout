@@ -22,7 +22,6 @@ class Player :
         Upgradeable abilities:
             paddle size,
             paddle speed,
-
     """
 
     def __init__( self, rect: Rect, color: Color) :
@@ -45,10 +44,10 @@ class Player :
         self.hype_armed = False
         self.gun_timer = -100
         self.shoot_timer = 0
-        self.hype_gun_duration = 3
+        self.hype_gun_duration = 2.5
         self.gun_duration = 6
         self.gun_shoot_interval = 0.5
-        self.hype_gun_shoot_interval = 0.18
+        self.hype_gun_shoot_interval = 0.08
         self.bullets = []
         self.bullet_size = Pos(3,10)
         self.bullet_speed = 0.2
@@ -57,9 +56,10 @@ class Player :
         self.size_list  = []
         self.speed_list = []
 
+        self.target_size = None
 
         min_size = self.size.x * 0.1
-        self.size_wing = 6
+        self.size_wing = 5
         self.size_index = 0
         self.min_size_index = -self.size_wing
         self.max_size_index = self.size_wing
@@ -82,6 +82,8 @@ class Player :
 
         min_speed = self.size.y * 0.1
 
+
+        self.target_speed = None
         self.speed_index = 0
         self.speed_wing = 6
         self.min_speed_index = -self.speed_wing
@@ -155,13 +157,19 @@ class Player :
             if left :
                 self.pos.x = 0
 
-
-    def respeed( self ):
+    def do_respeed( self ):
         center = self.rect.center
-        self.size.y = self.speed_list[self.speed_index]
+        current_speed = self.size.y
+        target_speed = self.target_speed
+        diff = target_speed - current_speed
+        step = 0.03
+        self.size.y = current_speed + (diff * step)
         rect = self.rect
         rect.center = center
         self.pos.x, self.pos.y = rect.x, rect.y
+
+    def respeed( self ):
+        self.target_speed = self.speed_list[self.speed_index]
 
 
     def speed_up( self ):
@@ -179,9 +187,22 @@ class Player :
 
         self.respeed()
 
-    def resize( self ):
+    def do_resize( self ):
         center = self.rect.center
-        self.size.x = self.size_list[self.size_index]
+
+        current_size= self.size.x
+        target_size = self.target_size
+        diff = target_size - current_size
+        if abs(diff) > self.window.size.x *0.001:
+            step = 0.04
+            new_size = current_size + diff * step
+        else:
+            new_size = self.target_size
+            self.target_size = None
+
+
+        self.size.x = new_size
+
         rect = self.rect
         rect.center = center
         self.pos.x, self.pos.y = rect.x, rect.y
@@ -190,11 +211,15 @@ class Player :
 
         right = self.rect.center[0] >= self.window.size.x / 2
 
-        if fix:
-            if right:
+        if fix :
+            if right :
                 self.pos.x = self.window.size.x - self.size.x
-            else:
+            else :
                 self.pos.x = 0
+
+    def resize( self ):
+        self.target_size = self.size_list[self.size_index]
+
 
 
     def grow( self ) :
@@ -272,7 +297,11 @@ class Player :
 
         pkeys = self.events.pressed_keys
 
+        if self.target_size is not None:
+            self.do_resize()
 
+        if self.target_speed is not None:
+            self.do_respeed()
 
         if self.is_armed:
             gun_shoot_interval = self.gun_shoot_interval
@@ -315,8 +344,13 @@ class Player :
             pg.draw.rect(surface,color,bullet)
 
         edge = self.edge
-        if self.size.y < 10:
+        if self.size.y < 15:
             edge = 0
 
+        width = 3
+        if self.size.y < 4:
+            width = 0
+
         pg.draw.rect(surface, self.color, self.rect,border_radius=edge)
-        pg.draw.rect(surface, self.border_color, self.rect,width=3,border_radius=edge)
+        if width:
+            pg.draw.rect(surface, self.border_color, self.rect,width=width,border_radius=edge)
