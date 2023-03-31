@@ -36,6 +36,7 @@
 
   "edge_size": 15,
   "background_color": "#60D394",
+  "ball_color": "#EE6055",
   "paddle_color": "#EE6055",
   "paddle_edge_size": 0
 

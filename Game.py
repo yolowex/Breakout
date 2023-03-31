@@ -40,7 +40,7 @@ class Game :
 
         self.map_.update()
 
-        ball_size = 0.018
+        ball_size = 0.020
         ball_rect = Rect(player_rect.x + player_rect.width / 2 - s.x*ball_size*0.5,
                             player_rect.y - s.x*ball_size,
                             s.x * ball_size,

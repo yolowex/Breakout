@@ -41,10 +41,9 @@ class Map :
         self.bg = Colors.BLACK
 
 
-
-        self.load(path)
-        self.create_tiles()
-
+    @property
+    def ball( self ):
+        return CommonResources.game.ball
 
     def reset( self ):
         self.path = "none"
@@ -76,7 +75,7 @@ class Map :
         if 'edge_size' in j:
             self.edge_size = j['edge_size']
 
-
+        self.ball.color = pg.color.Color(j['ball_color'])
         self.bg = pg.color.Color(j['background_color'])
         self.player.color = pg.color.Color(j['paddle_color'])
         self.player.edge = int(j['paddle_edge_size'])

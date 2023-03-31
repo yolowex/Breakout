@@ -1,9 +1,11 @@
+import pygame as pg
 from pygame.math import Vector2 as Pos
 from pygame.rect import Rect
 
 percent = lambda All,part: (100/All) * part
 
 import math
+
 """
 function RectCircleColliding(circle,rect){
     var distX = Math.abs(circle.x - rect.x-rect.w/2);
@@ -20,6 +22,14 @@ function RectCircleColliding(circle,rect){
     return (dx*dx+dy*dy<=(circle.r*circle.r));
 }
 """
+
+def polygon( surface, color, center: Pos, radius, edges, angle=0,width=0 ) :
+    top = center.copy()
+    top.y -= radius
+
+    points = [rotate(center, top, ((360 / edges) * j + angle)) for j in range(edges)]
+
+    return pg.draw.polygon(surface, color, points,width=width)
 
 def rotate(origin, point, angle):
     angle = math.radians(angle)

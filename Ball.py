@@ -1,3 +1,4 @@
+import Colors
 import pygame as pg
 from pygame.locals import *
 from pygame.math import Vector2 as Pos
@@ -9,6 +10,7 @@ from functions import *
 from random import randint as rr
 
 from CommonResources import CommonResources
+from Colors import Colors
 import math
 
 def rotate(origin, point, angle):
@@ -68,6 +70,10 @@ class Ball:
         rect.y = p_rect.y - rect.height
         self.pos.x,self.pos.y = rect.x,rect.y
         self.angle = r.randint(-3,3)
+
+    @property
+    def border_color( self ):
+        return self.color.lerp(Colors.BLACK,0.8)
 
     @property
     def on_fire( self ):
@@ -430,6 +436,10 @@ class Ball:
             if K_t in self.events.pressed_keys:
                 self.divide()
 
+            if K_y in self.events.held_keys:
+                print(self.sub_balls.__len__())
+                self.divide()
+
 
         if self.sub_balls is not None:
             for ball,c in zip(self.sub_balls,range(len(self.sub_balls))):
@@ -459,6 +469,7 @@ class Ball:
             pg.draw.circle(surface,color,center,radius)
 
         pg.draw.circle(surface,self.color,self.center,self.radius)
+        pg.draw.circle(surface,self.border_color,self.center,self.radius,width=2)
 
         if self.events.should_render_debug:
             self.render_debug(surface)

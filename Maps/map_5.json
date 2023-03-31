@@ -57,6 +57,7 @@
 
   "edge_size": 0,
   "background_color": "#BFD7EA",
+  "ball_color": "#C81D25",
   "paddle_color": "#C81D25",
   "paddle_edge_size": 0
 
