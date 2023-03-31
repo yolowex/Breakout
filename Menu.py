@@ -162,7 +162,7 @@ class Menu:
         oneliner_list = [bool(i) for i in [1, 1, 1]]
 
         s = self.window.size
-        rect = Rect([s.x * 0.1, s.y * 0.1, s.x * 0.65, s.y * 0.8])
+        rect = Rect([s.x * 0.1, s.y * 0.4, s.x * 0.8, s.y * 0.4])
 
         self.page_settings = Page(rect, text_list,english_text_list, collide_list, oneliner_list)
         self.page_settings.gap_y = 0.7

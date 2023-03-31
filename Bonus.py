@@ -1,3 +1,5 @@
+import random
+
 import pygame as pg
 from pygame.locals import *
 from pygame.math import Vector2 as Pos
@@ -52,7 +54,7 @@ class Bonus:
         self.center = center
         self.radius = radius
         self.color = color
-        self.fall_speed = 1 / self.events.determined_fps * 2
+        self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.7,2)
 
     @property
     def rect( self ):

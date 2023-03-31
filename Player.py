@@ -5,7 +5,7 @@ from pygame.rect import Rect
 from pygame.color import Color
 from typing import Optional
 from pygame.surface import Surface
-
+from random import randint as rr
 from Window import Window
 from EventHolder import EventHolder
 from Assets import Assets
@@ -36,6 +36,7 @@ class Player :
 
         self.init_rect = rect
 
+
         self.pos = Pos(rect.x, rect.y)
         self.size = Pos(rect.width, rect.height)
 
@@ -45,9 +46,9 @@ class Player :
         self.gun_timer = -100
         self.shoot_timer = 0
         self.hype_gun_duration = 3
-        self.gun_duration = 10
-        self.gun_shoot_interval = 0.75
-        self.hype_gun_shoot_interval = 0.1
+        self.gun_duration = 6
+        self.gun_shoot_interval = 0.5
+        self.hype_gun_shoot_interval = 0.18
         self.bullets = []
         self.bullet_size = Pos(3,10)
         self.bullet_speed = 0.2
@@ -98,6 +99,7 @@ class Player :
         self.speed_index += abs(self.min_speed_index)
         self.max_speed_index += abs(self.min_speed_index)
         self.min_speed_index += abs(self.min_speed_index)
+
 
 
 
@@ -246,7 +248,7 @@ class Player :
 
                 if brick_rect.colliderect(bullet_rect):
                     self.bullets.pop(c)
-                    brick.health -= 1
+                    brick.hit()
                     breaker = True
                     break
 
@@ -261,7 +263,11 @@ class Player :
 
         return now() <= self.gun_timer + duration
 
+
+
+
     def check_events( self ) :
+
         hkeys = self.events.held_keys
 
         pkeys = self.events.pressed_keys
@@ -269,7 +275,6 @@ class Player :
 
 
         if self.is_armed:
-
             gun_shoot_interval = self.gun_shoot_interval
             if self.hype_armed:
                 gun_shoot_interval = self.hype_gun_shoot_interval
@@ -280,6 +285,7 @@ class Player :
         else:
             if self.hype_armed:
                 self.hype_armed = False
+                self.gun_timer = -100
 
 
         self.bullets_march()

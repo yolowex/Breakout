@@ -6,6 +6,7 @@ from pygame.color import Color
 import random as r
 from pygame.surface import Surface
 from functions import *
+from random import randint as rr
 
 from CommonResources import CommonResources
 import math
@@ -19,6 +20,7 @@ def rotate(origin, point, angle):
     qy = oy + math.sin(angle) * (px - ox) + math.cos(angle) * (py - oy)
     return qx, qy
 
+now = lambda: pg.time.get_ticks() / 1000
 
 class Ball:
     def __init__(self,rect:Rect,color:Color):
@@ -35,11 +37,15 @@ class Ball:
         self.pos = Pos(rect.x,rect.y)
         self.size = Pos(rect.width,rect.height)
         self.color = color
+        self.tail: list[list[Pos, float, Color]] = []  # list of tuple(center,radius,color)
 
         self.top_pos_distance = 50
         self.speed = 0.05
 
         self.angle = 180
+
+        self.on_fire_timer = -100
+        self.on_fire_duration = 5
 
 
     def reset( self ):
@@ -49,6 +55,21 @@ class Ball:
         rect.y = p_rect.y - rect.height
         self.pos.x,self.pos.y = rect.x,rect.y
         self.angle = r.randint(-3,3)
+
+    @property
+    def on_fire( self ):
+        return now() <= self.on_fire_timer + self.on_fire_duration
+
+    @property
+    def fire_color( self ) :
+        red = rr(225, 255)
+        green = rr(0, 150)
+        blue = green
+        return Color(red, green, blue)
+
+    @property
+    def radius( self ):
+        return self.rect.w / 2
 
     @property
     def top( self ):
@@ -189,6 +210,10 @@ class Ball:
 
             if brick.rect.colliderect(self.rect) :
                 # self.angle += 180
+                if self.on_fire:
+                    brick.health = 0
+                    break
+
                 vertical_bias = 'between'
                 horizontal_bias = 'between'
                 vertical_diff = 0
@@ -326,7 +351,36 @@ class Ball:
         self.check_map_collisions()
 
 
+    def check_fire_tail_events( self ):
+
+        if self.events.is_dev:
+            if K_r in self.events.pressed_keys:
+                self.on_fire_timer = now()
+
+        c = 0
+        for _, radius, _ in self.tail :
+            radius *= 0.95
+            self.tail[c][1] = radius
+            if radius <= 0.7 :
+                self.tail.pop(c)
+            c += 1
+
+        if not self.on_fire:
+            return
+
+        center = self.center
+        radius = self.radius
+        color = self.fire_color
+        self.tail.append([center,radius,color])
+
+
+
+
+
+
+
     def check_events( self ):
+        self.check_fire_tail_events()
 
         self.angle = self.angle % 360
         self.move()
@@ -334,10 +388,15 @@ class Ball:
 
     def render_debug( self,surface:Surface ):
         pg.draw.line(surface,self.colors.WHITE,self.center,self.target_point)
+        pg.draw.rect(surface,self.color,self.rect)
 
 
     def render( self,surface:Surface ):
-        pg.draw.rect(surface,self.color,self.rect)
+
+        for center,radius,color in self.tail:
+            pg.draw.circle(surface,color,center,radius)
+
+        pg.draw.circle(surface,self.color,self.center,self.radius)
 
         if self.events.should_render_debug:
             self.render_debug(surface)

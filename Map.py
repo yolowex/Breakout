@@ -38,6 +38,8 @@ class Map :
         self.edge_size = 0
         self.bg = Colors.BLACK
 
+
+
         self.load(path)
         self.create_tiles()
 
@@ -60,6 +62,8 @@ class Map :
         self.reset()
         self.load(path)
         self.create_tiles()
+
+
 
 
     def load( self,path:str ):
@@ -123,10 +127,9 @@ class Map :
                     Y-self.total_gap_y*Y
                 )
                 brick = Brick(rect,color,health)
-                brick.set_bonus(50)
+                brick.set_bonus(20)
                 brick.edge_size = self.edge_size
                 self.bricks.append(brick)
-
 
     def check_events( self ) :
 
