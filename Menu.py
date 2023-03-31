@@ -14,9 +14,11 @@ from modules.mygame.drawables import TextBox
 from modules.mygame.structures import Pos
 
 from CommonResources import CommonResources
+from functions import *
 
 from Page import Page
 import json
+from Video import Video
 
 file = open("./Maps/all_maps.json").read()
 
@@ -52,6 +54,42 @@ class Menu:
         self.page_dict = {}
 
         self.page_number = Menu.MAIN_MENU
+
+
+        size_scale = Pos(0.5,0.5)
+        s = self.window.size
+        size = Pos(s.x*size_scale.x,s.y*size_scale.y)
+
+
+        self.videos_x_pos = 0
+        self.videos_direction = -1
+        self.video_0 = Video("./videos/1.mp4",size_scale)
+        self.video_1 = Video("./videos/2.mp4",size_scale)
+        self.video_2 = Video("./videos/3.mp4",size_scale)
+        self.video_3 = Video("./videos/4.mp4",size_scale)
+        self.video_4 = Video("./videos/5.mp4",size_scale)
+        self.video_5 = Video("./videos/6.mp4",size_scale)
+
+        self.videos = [
+            self.video_0,
+            self.video_1,
+            self.video_2,
+            self.video_3,
+            self.video_4,
+            self.video_5,
+        ]
+
+        self.video_0.pos = Pos(0,0)
+        self.video_1.pos = Pos(size.x,0)
+        self.video_2.pos = Pos(0,size.y)
+        self.video_3.pos = Pos(size.x,size.y)
+        self.video_4.pos = Pos(size.x*2,size.y)
+        self.video_5.pos = Pos(size.x*2,0)
+
+
+
+
+        self.video_index = 0
 
 
         self.make_pages()
@@ -215,12 +253,32 @@ class Menu:
     def current_level_path( self ):
         return all_maps[self.events.current_level]
 
+    def reverse( self ):
+        self.videos_direction *= -1
+
     @property
     def current_page( self ) -> Page:
         return self.page_dict[self.page_number]
 
     def check_events( self ):
+
+
+        for video in self.videos:
+            video.pos.x += self.videos_direction
+            if video.pos.x<=-video.size.x:
+                video.pos.x+=video.size.x*3
+            if video.pos.x>self.window.size.x:
+                video.pos.x-=video.size.x*3
+
         self.current_page.check_events()
+
+        self.video_0.check_events()
+        self.video_1.check_events()
+        self.video_2.check_events()
+        self.video_3.check_events()
+        self.video_4.check_events()
+        self.video_5.check_events()
+
 
         if K_F1 in self.events.released_keys:
             self.events.should_quit = True
@@ -235,6 +293,7 @@ class Menu:
 
         elif self.current_page.current_collision is not None and self.events.mouse_pressed_keys[0]:
             c = self.current_page.current_collision
+
             if self.page_number == Menu.MAIN_MENU:
                 if c == 1:
                     self.page_number = Menu.LEVEL_MENU
@@ -269,15 +328,21 @@ class Menu:
                     self.events.should_run_game = True
                     self.game.reload(self.current_level_path)
                 elif c == 4:
+                    self.reverse()
                     self.page_number = Menu.MAIN_MENU
 
 
             elif self.page_number == Menu.SETTINGS_MENU:
+
                 if c == 1:
                     self.relang()
                 elif c == 2:
+                    self.reverse()
                     self.page_number = Menu.MAIN_MENU
+
             elif self.page_number == Menu.ABOUT_US:
+                self.reverse()
+
                 if c == 1:
                     self.page_number = Menu.MAIN_MENU
 
@@ -293,8 +358,22 @@ class Menu:
     def render_debug( self,surface:Surface ):
         ...
 
+    def render_videos( self,surface:Surface  ):
+        pos = Pos(self.videos_x_pos,0)
+        self.video_0.render(surface,pos)
+        self.video_1.render(surface,pos)
+        self.video_2.render(surface,pos)
+        self.video_3.render(surface,pos)
+        self.video_4.render(surface,pos)
+        self.video_5.render(surface,pos)
+
+
+
     def render( self,surface:Surface  ):
         surface.fill(self.bg)
+
+        self.render_videos(surface)
+
         self.current_page.render(surface)
 
         if self.events.should_render_debug:

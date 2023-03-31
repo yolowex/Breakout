@@ -30,6 +30,7 @@ class EventHolder :
         self.should_quit = False
         self.game_over = False
         self.determined_fps = 60
+        self.menu_fps = 25
         self.final_fps = 0
         self.current_level = 1
         self.language = EventHolder.LANGUAGE_ENGLISH
