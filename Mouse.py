@@ -129,9 +129,13 @@ class Mouse:
 
 
     def check_ball_aim( self ):
-        if self.rect.colliderect(self.ball.rect):
-            if self.event_holder.mouse_held_keys[0]:
-                pg.mouse.set_pos(self.ball.center)
+
+        for ball in [self.ball] + self.ball.sub_balls:
+            if self.rect.colliderect(ball.rect):
+                if self.event_holder.mouse_held_keys[0]:
+                    pg.mouse.set_pos(ball.center)
+
+
 
 
     def check_bonuses_aim( self ):
