@@ -20,7 +20,6 @@ class Video:
         self.size = Pos(s.x * self.size_scale.x, s.y * self.size_scale.y)
         self.fix()
         self.transform()
-        print(len(self.frames))
 
 
     def fix( self ):

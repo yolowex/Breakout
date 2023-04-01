@@ -185,7 +185,7 @@ class Ball:
                     self.swap(ball)
                     was_swapped = True
                 else:
-                    self.events.game_over = True
+                    if not self.events.is_dev: self.events.game_over = True
                     self.game.get_screen_shot()
 
 

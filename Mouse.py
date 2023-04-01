@@ -12,7 +12,7 @@ class Mouse:
         pg.mouse.set_visible(False)
         self.mouse_color = pg.color.Color(0, 0, 0)
         self.mouse_radius = 10
-        self.mouse_width = 1
+        self.mouse_width = 2
         self.mouse_angle = 0
 
         self.radius_range = [self.mouse_radius*0.8,self.mouse_radius*1.2]
@@ -32,6 +32,28 @@ class Mouse:
         self.bs = 1.5
 
 
+    @property
+    def pos( self ):
+        return self.event_holder.mouse_pos.copy()
+
+    @property
+    def rect( self ):
+        return Rect(
+            self.pos.x-self.mouse_radius,
+            self.pos.y-self.mouse_radius,
+            self.mouse_radius,
+            self.mouse_radius
+        )
+
+
+    @property
+    def map_( self ):
+        return CommonResources.game.map_
+
+    @property
+    def ball( self ):
+        return CommonResources.game.ball
+
     def top( self,angle=0 ) :
         pos = self.event_holder.mouse_pos.copy()
         pos.y -= (self.mouse_radius - 1)
@@ -49,7 +71,7 @@ class Mouse:
 
         return (p1, p3), (p2, p4)
 
-    def check_events( self ):
+    def dance( self ):
         if self.event_holder.mouse_moved:
             self.mouse_timer = now()
 
@@ -105,11 +127,33 @@ class Mouse:
         self.mouse_angle += 1 * self.angle_direction
 
 
+
+    def check_ball_aim( self ):
+        if self.rect.colliderect(self.ball.rect):
+            if self.event_holder.mouse_held_keys[0]:
+                pg.mouse.set_pos(self.ball.center)
+
+
+    def check_bonuses_aim( self ):
+        for bonus in self.map_.bonus_list:
+            if self.rect.colliderect(bonus.rect) :
+                if self.event_holder.mouse_held_keys[0] :
+                    pg.mouse.set_pos(bonus.center)
+
+    def check_events( self ):
+        self.dance()
+        self.check_ball_aim()
+        self.check_bonuses_aim()
+
+
+
+
+
     def render( self,surface:pg.surface.Surface ):
         if now() > self.mouse_timer + self.mouse_timer_interval:
            return
 
-        pg.draw.circle(surface, self.mouse_color, self.event_holder.mouse_pos, self.mouse_radius,
+        pg.draw.circle(surface, self.mouse_color, self.pos, self.mouse_radius,
             width=self.mouse_width)
 
         line_a, line_b = self.lines(self.mouse_angle)

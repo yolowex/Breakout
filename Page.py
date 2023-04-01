@@ -17,9 +17,6 @@ from CommonResources import CommonResources
 
 
 class Page :
-
-
-
     def __init__( self, rect: Rect, persian_text_list: list[str],english_text_list: list[str],
             collide_list: list[bool],
             oneliner_list: list[bool] ) :

@@ -140,8 +140,19 @@ class Player :
         return self.rect.width * 0.1
 
     def move( self, hkeys ) :
+        mouse_pos = self.events.mouse_pos
+
         right = K_RIGHT in hkeys or K_d in hkeys
         left = K_LEFT in hkeys or K_a in hkeys
+
+        if self.events.mouse_focus and self.events.mouse_held_keys[0]:
+
+            right = right or mouse_pos.x > self.rect.center[0]
+            left =  left or mouse_pos.x < self.rect.center[0]
+
+
+
+
         if right and left : right = left = False
 
         if right :
