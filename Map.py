@@ -40,6 +40,8 @@ class Map :
         self.edge_size = 0
         self.bg = Colors.BLACK
 
+        # self.bricks_break_sound = pg.mixer.Sound("./sounds/Block Break 2.wav")
+
 
     @property
     def ball( self ):
@@ -134,7 +136,7 @@ class Map :
                 section = Bonus.by_number[section_id]
                 if section not in ['empty','none']:
                     bonus_name = r.choice(Bonus.section_dict[section])
-                    brick.set_bonus(40,bonus_name=bonus_name)
+                    brick.set_bonus(80,bonus_name=bonus_name)
 
 
                 brick.edge_size = self.edge_size
@@ -166,6 +168,11 @@ class Map :
 
 
         for c in brick_destroy_list[::-1]:
+
+            v = self.ball.volumes
+            CommonResources.ball_channel.stop()
+            CommonResources.ball_channel.set_volume(v[0]*0.5,v[1]*0.5)
+            CommonResources.ball_channel.play(r.choice(self.assets.break_sounds))
             self.bricks.pop(c)
 
 

@@ -13,6 +13,7 @@ from Colors import Colors
 
 import random as r
 from Map import Map
+from functions import *
 from CommonResources import CommonResources
 
 now = lambda: pg.time.get_ticks() / 1000
@@ -113,6 +114,13 @@ class Player :
         self.size = Pos(rect.width, rect.height)
         self.size_index = self.size_wing
         self.speed_index = self.speed_wing
+
+
+    @property
+    def volumes( self ) :
+        right = percent(self.window.size.x, self.rect.centerx)
+        left = 100 - right
+        return left / 100, right / 100
 
     @property
     def map_( self ) -> Map:
@@ -256,6 +264,13 @@ class Player :
         self.arm_up()
 
     def shoot( self ):
+        v = self.volumes
+
+        CommonResources.gun_channel.stop()
+        CommonResources.gun_channel.set_volume(v[0],v[1])
+        CommonResources.gun_channel.play(r.choice(self.assets.gun_sounds))
+
+
         bullet_1 = Rect(self.pos.x,self.pos.y,self.bullet_size.x,self.bullet_size.y)
         bullet_2 = Rect(self.pos.x+self.size.x,self.pos.y
                             ,self.bullet_size.x,self.bullet_size.y)
@@ -284,7 +299,7 @@ class Player :
 
                 if brick_rect.colliderect(bullet_rect):
                     self.bullets.pop(c)
-                    brick.hit()
+                    brick.hit(gun=True)
                     breaker = True
                     break
 

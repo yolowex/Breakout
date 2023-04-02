@@ -111,6 +111,20 @@ class Ball:
     def rect( self ):
         return Rect(self.pos.x,self.pos.y,self.size.x,self.size.y)
 
+
+    @property
+    def volumes( self ):
+        right = percent(self.window.size.x,self.center.x)
+        left = 100 - right
+        return left/100,right/100
+
+
+
+    def hit( self ):
+        v = self.volumes
+        CommonResources.ball_channel.set_volume(v[0],v[1])
+        CommonResources.ball_channel.play(r.choice(self.assets.hit_sounds))
+
     def check_walls_collision( self ):
         c = self.center
         a = self.angle
@@ -119,6 +133,7 @@ class Ball:
         ran = lambda: r.randint(-ran_factor,ran_factor)
         was_swapped = False
         if c.x < 0 + self.size.x / 2 : # LEFT
+            self.hit()
             c.x = self.size.x / 2
 
             if a == 180:
@@ -138,6 +153,8 @@ class Ball:
 
 
         if c.x > self.window.size.x - self.size.x / 2 : # RIGHT
+            self.hit()
+
             c.x = self.window.size.x - self.size.x / 2
 
             if a == 180 :
@@ -156,6 +173,8 @@ class Ball:
                 self.angle = 180 + abs(180 - a) + ran()
 
         if c.y < 0 + self.size.y / 2 : # UP
+            self.hit()
+
             c.y = self.size.y / 2
 
             if a == 90 :
@@ -214,6 +233,7 @@ class Ball:
 
 
         if self.player.rect.colliderect(self.rect):
+            self.hit()
             self.pos.y = self.player.rect.y - self.size.y
 
             p_center = Pos(self.player.rect.center)

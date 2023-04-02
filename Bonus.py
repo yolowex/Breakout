@@ -58,8 +58,8 @@ class Bonus :
     def __init__( self, name: str, center: Pos, radius, color: Color ) :
         if type(center) == tuple : center = Pos(center)
 
-        self.consumed = False
 
+        self.consumed = False
         self.events = CommonResources.event_holder
         self.colors = CommonResources.colors
         self.assets = CommonResources.assets
@@ -83,6 +83,15 @@ class Bonus :
             self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.5, 2)
 
         if self.name == Bonus.SHRINK: self.fall_speed *= 2
+
+    @property
+    def sound( self ):
+        if self.name in Bonus.section_dict['bad']:
+            return self.assets.bad_sound
+        if self.name in Bonus.section_dict['good']:
+            return self.assets.good_sound
+        if self.name in Bonus.section_dict['best']:
+            return self.assets.best_sound
 
     @property
     def multiball_top( self ) :
@@ -188,6 +197,7 @@ class Bonus :
 
         if self.rect.colliderect(pr) :
             self.consumed = True
+            CommonResources.bonuses_channel.play(self.sound)
             cool_dict[self.name]()
 
 

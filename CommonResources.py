@@ -21,8 +21,22 @@ class CommonResources:
     map_ = None
     game = None
 
+    bricks_channel: pg.mixer.Channel
+    bonuses_channel: pg.mixer.Channel
+    ball_channel: pg.mixer.Channel
+    gun_channel: pg.mixer.Channel
+    gun_brick_channel: pg.mixer.Channel
+
+
     @staticmethod
     def set_data(window:Window,event_holder:EventHolder,assets:Assets,colors:Colors):
+        CommonResources.bricks_channel = pg.mixer.Channel(0)
+        CommonResources.ball_channel = pg.mixer.Channel(1)
+        CommonResources.bonuses_channel = pg.mixer.Channel(2)
+        CommonResources.gun_channel = pg.mixer.Channel(3)
+        CommonResources.gun_brick_channel = pg.mixer.Channel(4)
+
+
         CommonResources.window = window
         CommonResources.event_holder = event_holder
         CommonResources.assets = assets

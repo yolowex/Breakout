@@ -1,11 +1,11 @@
 {
-  "name": "level_0",
-  "rect_x": 0.0,
-  "rect_y": 0.0,
-  "rect_w": 1,
-  "rect_h": 0.70,
-  "total_gap_x": 0.0,
-  "total_gap_y": 0.0,
+  "name": "My New Game",
+  "rect_x": 0.1,
+  "rect_y": 0.1,
+  "rect_w": 0.8,
+  "rect_h": 0.7,
+  "total_gap_x": 0.05,
+  "total_gap_y": 0.05,
   "health_rows":
   [
 

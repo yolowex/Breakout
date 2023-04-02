@@ -6,7 +6,7 @@ from CommonResources import CommonResources as cr
 
 class Video:
     def __init__(self,path:str,size_scale:Pos):
-        self.frames = get_video_frames(path)
+        self.frames = get_video_frames(path,250,6)
         self.frames.pop(0)
         self.frames.pop(-1)
 
