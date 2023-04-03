@@ -22,7 +22,7 @@ class Assets:
             ["hit1", "hit2", "hit3", "hit4", "hit5"]]
 
         self.gun_sounds = [pg.mixer.Sound("./sounds/" + i + ".wav") for i in
-            [f"laserShoot{i}" for i in range(1,5)]]
+            [f"laserShoot{i}" for i in range(1,4)]]
 
         self.shoot_hit_sounds = [pg.mixer.Sound("./sounds/" + i + ".wav") for i in
             [f"shoot_hit{i}" for i in range(1, 6)]]

@@ -114,6 +114,8 @@ class Player :
         self.size = Pos(rect.width, rect.height)
         self.size_index = self.size_wing
         self.speed_index = self.speed_wing
+        self.resize()
+        self.respeed()
 
 
     @property
@@ -264,9 +266,12 @@ class Player :
         self.arm_up()
 
     def shoot( self ):
-        v = self.volumes
+        v = list(self.volumes)
+        if self.hype_armed:
+            v = [v[0]*0.5,v[1]*0.5]
+            CommonResources.gun_channel.stop()
 
-        CommonResources.gun_channel.stop()
+
         CommonResources.gun_channel.set_volume(v[0],v[1])
         CommonResources.gun_channel.play(r.choice(self.assets.gun_sounds))
 
