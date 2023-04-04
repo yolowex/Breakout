@@ -58,6 +58,26 @@ class Game :
     def get_screen_shot( self ):
         self.screen_shot = self.window.surface.copy()
 
+    def win_text( self ):
+        win_text = "شما بردید! برای انتخاب مرحله بعدی کلید اینتر را فشار دهید!"
+        win_text_english_text = "You win! press enter to proceed!"
+
+        target_font_path = self.assets.persian_font_path
+        direction = "rtl"
+        font_size = 60
+        text = win_text
+
+        if self.events.language == EventHolder.LANGUAGE_ENGLISH :
+            target_font_path = self.assets.english_font_path
+            direction = "ltr"
+            font_size = 30
+            text = win_text_english_text
+
+        text_box = TextBox(text, Pos(0, 0), self.window.size.x * 0.7, target_font_path, font_size,
+            (0, 0, 0), (255, 255, 255, 155), direction, wholesome=True)
+
+        return text_box.text_surface
+
     def game_over_text( self ):
         game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
         game_over_english_text = "You lose! press enter to play again!"
@@ -80,7 +100,7 @@ class Game :
         return text_box.text_surface
 
     def check_events( self ) :
-        if not self.events.game_over:
+        if not self.events.game_over and not self.events.win:
             self.player.check_events()
             self.ball.check_events()
             self.map_.check_events()
@@ -94,22 +114,32 @@ class Game :
             self.player.reset()
             self.ball.reset()
 
+        if self.events.win and K_RETURN in self.events.pressed_keys:
+            self.events.win = False
+            self.events.should_run_game = False
+
 
     def render_debug( self, surface: Surface ) :
         ...
 
     def render( self, surface: Surface ) :
-        if not self.events.game_over:
+        if self.events.game_over :
+            surface.blit(self.screen_shot, [0, 0])
+            text = self.game_over_text()
+            rect = text.get_rect()
+            rect.center = self.window.rect.center
+            surface.blit(text, rect)
 
+        elif self.events.win:
+            surface.blit(self.screen_shot, [0, 0])
+            text = self.win_text()
+            rect = text.get_rect()
+            rect.center = self.window.rect.center
+            surface.blit(text, rect)
+        else:
             self.map_.render(surface)
             self.player.render(surface)
             self.ball.render(surface)
 
             if self.events.should_render_debug :
                 self.render_debug(surface)
-        else:
-            surface.blit(self.screen_shot,[0,0])
-            text = self.game_over_text()
-            rect = text.get_rect()
-            rect.center = self.window.rect.center
-            surface.blit(text,rect)

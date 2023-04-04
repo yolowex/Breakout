@@ -129,7 +129,7 @@ class Ball:
         c = self.center
         a = self.angle
 
-        ran_factor = 1
+        ran_factor = 5
         ran = lambda: r.randint(-ran_factor,ran_factor)
         was_swapped = False
         if c.x < 0 + self.size.x / 2 : # LEFT

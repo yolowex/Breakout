@@ -148,6 +148,10 @@ class Map :
         brick_destroy_list = []
         bonus_destroy_list = []
 
+        if self.bricks.__len__() == 0:
+            self.events.win = True
+            CommonResources.game.get_screen_shot()
+
         for bonus,c in zip(self.bonus_list,range(len(self.bonus_list))):
             if bonus.name == Bonus.SHRINK and (bonus.center.y - bonus.radius) > self.window.size.y:
                 bonus.center.y = -bonus.radius
