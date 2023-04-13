@@ -5,7 +5,7 @@ from pygame.rect import Rect
 percent = lambda All,part: (100/All) * part
 
 import math
-import cv2
+# import cv2
 
 """
 function RectCircleColliding(circle,rect){
@@ -60,24 +60,24 @@ def RectCircleCollision(circle_center:Pos,circle_radius,rect:Rect):
     return dx*dx+dy*dy<=(circle_radius*circle_radius)
 
 
-
-def get_video_frames(path:str,max_frame=100,read_counter=5) -> list[pg.surface.Surface]:
-    L = []
-
-    video = cv2.VideoCapture(path)
-
-    c = 0
-    while True:
-        c+=1
-        if len(L)>=max_frame:
-            break
-        s,v = video.read()
-        if s:
-            video_surf = pg.image.frombuffer(v.tobytes(), v.shape[1 : :-1],
-                "BGR")
-            if c % read_counter == 0 :
-                L.append(video_surf)
-        else:
-            break
-
-    return L
+#
+# def get_video_frames(path:str,max_frame=100,read_counter=5) -> list[pg.surface.Surface]:
+#     L = []
+#
+#     video = cv2.VideoCapture(path)
+#
+#     c = 0
+#     while True:
+#         c+=1
+#         if len(L)>=max_frame:
+#             break
+#         s,v = video.read()
+#         if s:
+#             video_surf = pg.image.frombuffer(v.tobytes(), v.shape[1 : :-1],
+#                 "BGR")
+#             if c % read_counter == 0 :
+#                 L.append(video_surf)
+#         else:
+#             break
+#
+#     return L
