@@ -8,11 +8,10 @@ import random as r
 from Colors import Colors
 
 from pygame.surface import Surface
-
+from modules.gui.multiline_text import *
 from EventHolder import EventHolder
 
-from modules.mygame.drawables import TextBox
-from modules.mygame.structures import Pos
+
 from CommonResources import CommonResources
 
 
@@ -69,10 +68,11 @@ class Page :
             size = self.english_font_size
 
         for text,oneliner in zip(target_text_list,self.oneliner_list) :
-            text_box = TextBox(text, Pos(0, 0), self.rect.width, target_font_path, size,
-                tuple(Colors.BLACK), tuple(Colors.GLASS), direction, oneliner=oneliner
-                ,wholesome=True)
-            self.surface_list.append(text_box.text_surface)
+
+            font = pg.font.SysFont('monospace', 30)
+            surface = UltimateMultilineText(text, self.rect.w, font,(150,150,150))
+
+            self.surface_list.append(surface)
 
 
     def generate_rects( self ) :

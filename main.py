@@ -16,16 +16,13 @@ from CommonResources import CommonResources
 from Game import Game
 from Menu import Menu
 from Mouse import Mouse
-from modules.mygame.drawables import TextBox,TextView
-from modules.mygame.structures import *
+# from modules.mygame.drawables import TextBox,TextView
+# from modules.mygame.structures import *
 from functions import *
 
 
 pg.init()
 window = Window(V2(800,800))
-
-
-
 
 event_holder = EventHolder()
 colors = Colors()
@@ -92,3 +89,9 @@ while not event_holder.should_quit:
 
 
 
+
+# import pygame as pg
+# from pygame.locals import *
+#
+# pg.init()
+# screen = pg.display.set_mode([800,640],)

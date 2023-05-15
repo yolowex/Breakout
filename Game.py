@@ -7,8 +7,7 @@ from pygame.surface import Surface
 import random as r
 from typing import Optional
 from CommonResources import CommonResources
-from modules.mygame.drawables import *
-from modules.mygame.structures import *
+from modules.gui.multiline_text import *
 
 from Colors import Colors
 from Player import Player
@@ -73,10 +72,10 @@ class Game :
             font_size = 30
             text = win_text_english_text
 
-        text_box = TextBox(text, Pos(0, 0), self.window.size.x * 0.7, target_font_path, font_size,
-            (0, 0, 0), (255, 255, 255, 155), direction, wholesome=True)
+        font = pg.font.SysFont('monospace', 30)
+        surface = UltimateMultilineText(text, self.window.size.x * 0.7, font,(150,150,150))
 
-        return text_box.text_surface
+        return surface
 
     def game_over_text( self ):
         game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
@@ -93,11 +92,11 @@ class Game :
             font_size = 30
             text = game_over_english_text
 
-        text_box = TextBox(text,Pos(0,0),self.window.size.x*0.7,target_font_path,
-            font_size,(0,0,0),(255,255,255,155),direction,wholesome=True
-        )
 
-        return text_box.text_surface
+        font = pg.font.SysFont('monospace',30)
+        surface = UltimateMultilineText(text,self.window.size.x*0.7,font,(150,150,150))
+
+        return surface
 
     def check_events( self ) :
         if not self.events.game_over and not self.events.win:

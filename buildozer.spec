@@ -1,19 +1,19 @@
 [app]
 
 # (str) Title of your application
-title = Breakout Pro
+title = Breakout Plus
 
 # (str) Package name
-package.name = breakout.pro
+package.name = breakout.plus
 
 # (str) Package domain (needed for android/ios packaging)
-package.domain = org.test
+package.domain = com.yolo
 
 # (str) Source code where the main.py live
 source.dir = .
 
 # (list) Source files to include (let empty to include all the files)
-source.include_exts = py,png,jpg,kv,atlas
+source.include_exts = py,png,jpg,kv,atlas,jpeg,json,wav
 
 # (list) List of inclusions using pattern matching
 #source.include_patterns = assets/*,images/*.png
@@ -29,7 +29,7 @@ source.include_exts = py,png,jpg,kv,atlas
 #source.exclude_patterns = license,images/*/*.jpg
 
 # (str) Application versioning (method 1)
-version = 0.2
+version = 0.101
 
 # (str) Application versioning (method 2)
 # version.regex = __version__ = ['"](.*)['"]
@@ -37,7 +37,7 @@ version = 0.2
 
 # (list) Application requirements
 # comma separated e.g. requirements = sqlite3,kivy
-requirements = python3,pygame,jnius,sdl2,sdl2_image,sdl2_mixer,sdl2_ttf,png,jpeg,
+requirements = python3,pygame,jnius,sdl2,sdl2_image,sdl2_mixer,sdl2_ttf,png,jpeg
 
 # (str) Custom source folders for requirements
 # Sets custom source for any requirements with recipes

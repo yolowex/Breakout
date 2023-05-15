@@ -10,15 +10,15 @@ from Colors import Colors
 import sys
 from pygame.surface import Surface
 
-from modules.mygame.drawables import TextBox
-from modules.mygame.structures import Pos
+# from modules.mygame.drawables import TextBox
+# from modules.mygame.structures import Pos
 
 from CommonResources import CommonResources
 from functions import *
 
 from Page import Page
 import json
-from Video import Video
+
 
 file = open("./Maps/all_maps.json").read()
 
