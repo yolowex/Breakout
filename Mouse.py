@@ -3,6 +3,7 @@ from pygame.locals import *
 from functions import *
 
 from CommonResources import CommonResources
+from pygame import Vector2
 
 now = lambda: pg.time.get_ticks() / 1000
 
@@ -34,7 +35,7 @@ class Mouse:
 
     @property
     def pos( self ):
-        return self.event_holder.mouse_pos.copy()
+        return Vector2(self.event_holder.mouse_pos)
 
     @property
     def rect( self ):
@@ -55,7 +56,7 @@ class Mouse:
         return CommonResources.game.ball
 
     def top( self,angle=0 ) :
-        pos = self.event_holder.mouse_pos.copy()
+        pos = Vector2(self.event_holder.mouse_pos)
         pos.y -= (self.mouse_radius - 1)
 
         pos = Pos(rotate(self.event_holder.mouse_pos, pos, angle))

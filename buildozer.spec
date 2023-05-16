@@ -1,10 +1,10 @@
 [app]
 
 # (str) Title of your application
-title = Breakout Plus
+title = Breakout Pro
 
 # (str) Package name
-package.name = breakout.plus
+package.name = breakout.pro
 
 # (str) Package domain (needed for android/ios packaging)
 package.domain = com.yolo
