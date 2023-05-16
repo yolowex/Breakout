@@ -112,11 +112,11 @@ class Menu:
 
 
     def make_page_0( self ):
-        t0 = "آجر شکن حرفه ای!"
-        t1 = "شروع بازی"
-        t2 = "تنظیمات"
-        t3 = "درباره ما"
-        t4 = "خروج"
+        t0 = "آجر شکن حرفه ای!"[::-1]
+        t1 = "شروع بازی"[::-1]
+        t2 = "تنظیمات"[::-1]
+        t3 = "درباره ما"[::-1]
+        t4 = "خروج"[::-1]
 
         e0 = "Breakout Pro!"
         e1 = "Play Game"
@@ -146,17 +146,17 @@ class Menu:
 
     @property
     def level_persian_text( self ) :
-        text = "مرحله "
+        text = "مرحله "[::-1]
         text += f"{self.events.current_level}"
         return text
 
 
     def make_page_1( self ):
         t0 = self.level_persian_text
-        t1 = "مرحله بعد"
-        t2 = "مرحله قبل"
-        t3 = "شروع بازی"
-        t4 = "بازگشت"
+        t1 = "مرحله بعد"[::-1]
+        t2 = "مرحله قبل"[::-1]
+        t3 = "شروع بازی"[::-1]
+        t4 = "بازگشت"[::-1]
 
         e0 = self.level_english_text
         e1 = "Next Level"
@@ -179,9 +179,9 @@ class Menu:
 
     def make_page_2( self ):
 
-        t0 = "تنظیمات"
-        t1 = "زبان: فارسی"
-        t2 = "بازگشت"
+        t0 = "تنظیمات"[::-1]
+        t1 = "زبان: فارسی"[::-1]
+        t2 = "بازگشت"[::-1]
 
         e0 = "Settings"
         e1 = "Language: English"
@@ -202,9 +202,9 @@ class Menu:
 
     def make_page_3( self ):
         t0 = "این بازی برای دوره آموزش پروژه محور کتابخانه پایگیم در سایت تاپلرن"\
-             " توسط مدرس محمد معین آذری طراحی و تولید شده است."
+             " توسط مدرس محمد معین آذری طراحی و تولید شده است."[::-1]
 
-        t1 = "بازگشت"
+        t1 = "بازگشت"[::-1]
 
         e0 = "This game was made by mohammad moein azari." \
              " This project" \
@@ -223,9 +223,9 @@ class Menu:
         self.page_about_us = Page(rect, text_list,english_text_list, collide_list, oneliner_list)
 
     def make_page_4( self ):
-        t0 = "آیا مطمئنید میخواهید از بازی خارج شوید؟ "
-        t1 = "بله"
-        t2 = "خیر"
+        t0 = "آیا مطمئنید میخواهید از بازی خارج شوید؟ "[::-1]
+        t1 = "بله"[::-1]
+        t2 = "خیر"[::-1]
 
         e0 = "Are you sure you are willing to give up and leave the game?"
         e1 = "Yes"

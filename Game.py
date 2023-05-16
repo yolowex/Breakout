@@ -15,6 +15,7 @@ from Player import Player
 from Ball import Ball
 from Map import Map
 from EventHolder import EventHolder
+from ui import UI
 
 class Game :
 
@@ -25,6 +26,8 @@ class Game :
         self.assets = CommonResources.assets
         self.window = CommonResources.window
         self.screen_shot: Optional[Surface] = None
+
+        self.ui = UI()
 
         s = self.window.size
         player_rect = Rect(s.x * 0.45, s.y * 0.92, s.x * 0.1, s.y * 0.025)
@@ -59,7 +62,7 @@ class Game :
         self.screen_shot = self.window.surface.copy()
 
     def win_text( self ):
-        win_text = "شما بردید! برای انتخاب مرحله بعدی کلید اینتر را فشار دهید!"
+        win_text = "شما بردید! برای انتخاب مرحله بعدی کلید اینتر را فشار دهید!"[::-1]
         win_text_english_text = "You win! press enter to proceed!"
 
         target_font_path = self.assets.persian_font_path
@@ -79,7 +82,7 @@ class Game :
         return surface
 
     def game_over_text( self ):
-        game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"
+        game_over_text = "شما باختید! برای بازی دوباره کلید اینتر را فشار دهید!"[::-1]
         game_over_english_text = "You lose! press enter to play again!"
 
         target_font_path = self.assets.persian_font_path
@@ -105,10 +108,12 @@ class Game :
             self.ball.check_events()
             self.map_.check_events()
 
+        self.ui.check_events()
+
         m: Mouse = CommonResources.mouse
         click = CommonResources.event_holder.mouse_pressed_keys[0]
 
-        if K_ESCAPE in self.events.released_keys:
+        if K_ESCAPE in self.events.released_keys or self.ui.trigger:
             self.events.should_run_game = False
 
         text = self.game_over_text()
@@ -116,7 +121,7 @@ class Game :
         rect.center = self.window.rect.center
 
         if self.events.game_over and (K_RETURN in self.events.pressed_keys or
-                            click and m.rect.colliderect(rect) ):
+                                      click and m.rect.colliderect(rect) ):
             self.events.game_over = False
             self.map_.reload()
             self.player.reset()
@@ -126,7 +131,7 @@ class Game :
         rect = text.get_rect()
         rect.center = self.window.rect.center
         if self.events.win and (K_RETURN in self.events.pressed_keys or
-                            click and m.rect.colliderect(rect) ) :
+                                click and m.rect.colliderect(rect) ) :
             self.events.win = False
             self.events.should_run_game = False
 
@@ -135,6 +140,8 @@ class Game :
         ...
 
     def render( self, surface: Surface ) :
+
+
         if self.events.game_over :
             surface.blit(self.screen_shot, [0, 0])
             text = self.game_over_text()
@@ -155,3 +162,5 @@ class Game :
 
             if self.events.should_render_debug :
                 self.render_debug(surface)
+
+        self.ui.render()
