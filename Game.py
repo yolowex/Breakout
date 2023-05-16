@@ -7,6 +7,7 @@ from pygame.surface import Surface
 import random as r
 from typing import Optional
 from CommonResources import CommonResources
+from Mouse import Mouse
 from modules.gui.multiline_text import *
 
 from Colors import Colors
@@ -42,8 +43,8 @@ class Game :
         ball_size = 0.020
         ball_rect = Rect(player_rect.x + player_rect.width / 2 - s.x*ball_size*0.5,
                             player_rect.y - s.x*ball_size,
-                            s.x * ball_size,
-                            s.x* ball_size)
+                            s.y * ball_size,
+                            s.y * ball_size)
 
         self.ball = Ball(ball_rect,self.colors.random_color().lerp(self.colors.BLUE, 0.7))
 
@@ -104,16 +105,28 @@ class Game :
             self.ball.check_events()
             self.map_.check_events()
 
+        m: Mouse = CommonResources.mouse
+        click = CommonResources.event_holder.mouse_pressed_keys[0]
+
         if K_ESCAPE in self.events.released_keys:
             self.events.should_run_game = False
 
-        if self.events.game_over and K_RETURN in self.events.pressed_keys:
+        text = self.game_over_text()
+        rect = text.get_rect()
+        rect.center = self.window.rect.center
+
+        if self.events.game_over and (K_RETURN in self.events.pressed_keys or
+                            click and m.rect.colliderect(rect) ):
             self.events.game_over = False
             self.map_.reload()
             self.player.reset()
             self.ball.reset()
 
-        if self.events.win and K_RETURN in self.events.pressed_keys:
+        text = self.win_text()
+        rect = text.get_rect()
+        rect.center = self.window.rect.center
+        if self.events.win and (K_RETURN in self.events.pressed_keys or
+                            click and m.rect.colliderect(rect) ) :
             self.events.win = False
             self.events.should_run_game = False
 

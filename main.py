@@ -39,7 +39,10 @@ try:
 
 
     pg.init()
-    window = Window(V2(800,800))
+    scale = 50
+    ar = aspect_ratio = V2(9,18)
+    rsize = V2(ar.x*scale,ar.y*scale)
+    window = Window(rsize)
 
     event_holder = EventHolder()
     colors = Colors()
@@ -60,13 +63,13 @@ try:
     game = Game()
     menu = Menu()
     mouse = Mouse()
-
+    CommonResources.mouse = mouse
 
     f = pg.font.SysFont('monospace',30,bold=True)
 
     font = lambda: f.render(f"FPS:{round(event_holder.final_fps)}",False,[80,12,25])
 
-    clock = pg.time.Clock()
+
     event_holder.determined_fps = 125
     event_holder.menu_fps = 60
 
@@ -100,9 +103,8 @@ try:
         if not event_holder.should_run_game:
             fps = event_holder.menu_fps
 
-        clock.tick(fps)
-        event_holder.final_fps = clock.get_fps()
 
 except Exception as e:
     error_message = re.sub(r'\s+', ' ', traceback.format_exc())
     print("[Checkpoint:Error]", error_message.strip())
+    print("[Checkpoint:Error]", traceback.format_exc())

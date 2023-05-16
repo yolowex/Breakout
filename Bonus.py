@@ -78,12 +78,17 @@ class Bonus :
         self.color = color
 
         if self.name == Bonus.FIREBALL:
-            self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(2, 4)
+            self._fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(2, 4)
         else:
-            self.fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.5, 2)
+            self._fall_speed = 1 / self.events.determined_fps * 2 * r.uniform(0.5, 2)
 
-        if self.name == Bonus.SHRINK: self.fall_speed *= 2
+        self._fall_speed *= 100
 
+        if self.name == Bonus.SHRINK: self._fall_speed *= 2
+
+    @property
+    def fall_speed( self ):
+        return self._fall_speed * CommonResources.event_holder.dt
     @property
     def sound( self ):
         if self.name in Bonus.section_dict['bad']:

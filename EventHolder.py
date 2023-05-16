@@ -33,6 +33,8 @@ class EventHolder :
         self.determined_fps = 60
         self.menu_fps = 25
         self.final_fps = 0
+        self.dt = 0
+        self.clock = pg.time.Clock()
         self.current_level = 1
         self.language = EventHolder.LANGUAGE_ENGLISH
 
@@ -68,3 +70,7 @@ class EventHolder :
             if i.type == MOUSEBUTTONUP :
                 self.mouse_released_keys = list(pg.mouse.get_pressed())
                 self.mouse_held_keys = list(pg.mouse.get_pressed())
+
+
+        self.dt = self.clock.tick(self.determined_fps) / 1000
+        self.final_fps = self.clock.get_fps()

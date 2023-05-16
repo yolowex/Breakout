@@ -51,7 +51,7 @@ class Player :
         self.hype_gun_shoot_interval = 0.08
         self.bullets = []
         self.bullet_size = Pos(3,10)
-        self.bullet_speed = 0.2
+        self.bullet_speed = 20
         self.bullets_color = Colors.BLACK
 
         self.size_list  = []
@@ -139,7 +139,7 @@ class Player :
 
     @property
     def speed( self ) :
-        return (self.window.size.y * 0.07 - self.rect.height) * 0.1
+        return (self.window.size.y * 0.07 - self.rect.height) * 8
 
     @property
     def speed_change_speed( self ):
@@ -165,10 +165,12 @@ class Player :
 
         if right and left : right = left = False
 
+        e = CommonResources.event_holder
+        speed = self.speed * e.dt
         if right :
-            self.pos.x += self.speed
+            self.pos.x += speed * 1.3
         if left :
-            self.pos.x -= self.speed
+            self.pos.x -= speed
 
         stick = not self.window.rect.contains(self.rect)
 
@@ -290,7 +292,7 @@ class Player :
 
     def bullets_march( self ):
         for bullet,color in self.bullets:
-            bullet.y -= bullet.h * self.bullet_speed
+            bullet.y -= bullet.h * self.bullet_speed * CommonResources.event_holder.dt
 
     def check_bullet_collisions( self ):
 

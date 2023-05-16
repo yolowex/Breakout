@@ -49,7 +49,7 @@ class Ball:
             self.sub_balls = []
 
         self.top_pos_distance = 50
-        self.speed = 0.05
+        self.speed = 5
 
         self.angle = 180
 
@@ -400,8 +400,9 @@ class Ball:
     def move( self ):
 
         target = self.target_point
-
-        new_center = self.center.lerp(target,self.speed)
+        e = CommonResources.event_holder
+        speed = self.speed * e.dt
+        new_center = self.center.lerp(target,speed)
         self.center = new_center
 
         self.check_walls_collision()

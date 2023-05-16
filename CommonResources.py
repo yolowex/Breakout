@@ -17,6 +17,7 @@ class CommonResources:
     event_holder:Optional[EventHolder] = None
     assets:Optional[Assets] = None
     colors:Optional[Colors] = None
+    mouse = None
     player = None
     map_ = None
     game = None
